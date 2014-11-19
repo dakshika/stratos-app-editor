@@ -1,4 +1,4 @@
-stratos-app-editor
-==================
+Apache Stratos Grapical Application Editor
+===========================================
 
-Application editor for Apache Stratos project. including topology view, Group creator, application creator with visual representation
+This is and Application editor for Apache Stratos project.I'm planning to including topology view, Group creator, application creator with visual representation using d3js and jsplub. 
