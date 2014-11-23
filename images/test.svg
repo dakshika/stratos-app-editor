@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<svg width="50" height="50" xmlns="http://www.w3.org/2000/svg">
+ <g id="cluster">
+  <title>Layer 1</title>
+  <ellipse stroke="#000" stroke-width="4" ry="22.312488" rx="22.312488" id="svg_42" cy="24.906249" cx="24.999999" fill-opacity="null" stroke-opacity="null" fill="none"/>
+  <line stroke-linecap="undefined" stroke-linejoin="undefined" id="svg_2" y2="74.5" x2="456.090384" y1="74.5" x1="102" stroke-width="23.5" stroke="#000" fill="none"/>
+  <line stroke-linecap="undefined" stroke-linejoin="undefined" id="svg_4" y2="284.50238" x2="456.090384" y1="284.50238" x1="102" stroke-width="23.5" stroke="#000" fill="none"/>
+  <rect id="svg_36" height="7" width="7" y="12.093756" x="12.750006" stroke-opacity="null" stroke-width="3" stroke="#000" fill="#000000"/>
+  <rect id="svg_37" height="7" width="7" y="30.406246" x="12.750006" stroke-opacity="null" stroke-width="3" stroke="#000" fill="#000000"/>
+  <rect id="svg_38" height="7" width="7" y="12.218756" x="30.749997" stroke-opacity="null" stroke-width="3" stroke="#000" fill="#000000"/>
+  <rect id="svg_39" height="7" width="7" y="30.531246" x="30.749997" stroke-opacity="null" stroke-width="3" stroke="#000" fill="#000000"/>
+  <line stroke="#000" stroke-linecap="null" stroke-linejoin="null" id="svg_43" y2="24.593749" x2="45.772667" y1="24.593749" x1="2.562514" fill-opacity="null" stroke-opacity="null" fill="none"/>
+  <line stroke="#000" stroke-linecap="null" stroke-linejoin="null" id="svg_47" y2="30.469127" x2="34.124994" y1="19.218753" x1="34.124994" fill-opacity="null" stroke-opacity="null" fill="none"/>
+  <rect id="svg_48" height="1.687499" width="4.374998" y="23.65625" x="14.312506" fill-opacity="null" stroke-opacity="null" stroke-width="null" stroke="#000" fill="none"/>
+  <line stroke="#000" transform="rotate(-0.13907977938652039 16.327388763425905,24.47525978088431) " stroke-linecap="null" stroke-linejoin="null" id="svg_49" y2="30.219603" x2="16.327389" y1="18.730918" x1="16.327389" fill-opacity="null" stroke-opacity="null" fill="none"/>
+  <rect id="svg_50" height="1.687499" width="4.374998" y="23.59375" x="31.874995" fill-opacity="null" stroke-opacity="null" stroke-width="null" stroke="#000" fill="none"/>
+ </g>
+</svg>

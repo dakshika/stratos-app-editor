@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>Apcahe application heirache</title>
+    <title>Apache application heirache</title>
     <script src="js/jquery-1.11.1/jquery-1.11.1.min.js"></script>
     <!--<script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.9.2/jquery-ui.min.js"></script>-->
     <script src="js/jsplumb-1.7.2/dom.jsPlumb-1.7.2-min.js"></script>
@@ -279,11 +279,11 @@
                         "deploymentPolicy":"deployment_policy_1",
                         "subGroups":[
                             {
-                                "alias":"group7alias",
+                                "alias":"group71alias",
                                 "autoScalingPolicy":"autoscale_policy_1",
                                 "clusters":[{
                                     "serviceName":"tomcat",
-                                    "clusterId":"c1alias71.tomcat.domain",
+                                    "clusterId":"c1alias72.tomcat.domain",
                                     "member":[
                                         {
                                             "serviceName":"tomcat",
@@ -293,6 +293,26 @@
                                             "memberId":"c1alias71.tomcat.domain6ecc9aa9-5452-478a-8f0b-1475a47a9a5d",
                                             "status":"Created",
                                             "memberIp":"10.0.0.84",
+                                            "memberPublicIp":"192.168.17.117",
+                                            "property":[
+                                                {
+                                                    "name":"PRIMARY",
+                                                    "value":false
+                                                },
+                                                {
+                                                    "name":"MIN_COUNT",
+                                                    "value":1
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "serviceName":"tomcat",
+                                            "clusterId":"c1alias73.tomcat.domain",
+                                            "networkPartitionId":"openstack",
+                                            "partitionId":"P1",
+                                            "memberId":"c1alias72.tomcat.domain6ecc9aa9-5452-478a-8f0b-1475a47a9a5d",
+                                            "status":"Created",
+                                            "memberIp":"10.0.0.72",
                                             "memberPublicIp":"192.168.17.117",
                                             "property":[
                                                 {
@@ -330,6 +350,26 @@
                         "memberId":"c1xxx.tomcat.domain39a371ff-1866-4a0a-8c82-1130de8dc937",
                         "status":"Activated",
                         "memberIp":"10.0.0.78",
+                        "memberPublicIp":"192.168.17.165",
+                        "property":[
+                            {
+                                "name":"PRIMARY",
+                                "value":false
+                            },
+                            {
+                                "name":"MIN_COUNT",
+                                "value":1
+                            }
+                        ]
+                    },
+                    {
+                        "serviceName":"tomcat",
+                        "clusterId":"c1xxx.tomcat.domain",
+                        "networkPartitionId":"openstack",
+                        "partitionId":"P1",
+                        "memberId":"c1xxx.tomcat.domain39a371ff-1866-4a0a-8c82-1130de8dc937",
+                        "status":"Activated",
+                        "memberIp":"10.0.0.79",
                         "memberPublicIp":"192.168.17.165",
                         "property":[
                             {
@@ -409,37 +449,69 @@
         //create initial root node
         rawout.push(rootnode);
 
+        //use to get cluster nodes
         function secondorylevelclusters(item, collector, parent){
             for (var prop in item) {
                 if (item.hasOwnProperty(prop)) {
-                    var cur_name =  item[prop].serviceName;
-                    rawout.push({"name": cur_name, "parent": parent});
+                    var cur_name =  item[prop].serviceName,
+                        clusterId = item[prop].clusterId,
+                         type = 'cluster',
+                            isLbCluster = item[prop].isLbCluster;
+                    rawout.push({"name": clusterId, "parent": parent, "clusterId":clusterId, "type":type,
+                                "isLbCluster":isLbCluster
+                                });
+                    clustermembers(item[prop].member,rawout, clusterId)
                 }
             }
+        }
+
+        //use to get member nodes on cluster
+        function clustermembers(item, collector, parent){
+            for (var prop in item) {
+                if (item.hasOwnProperty(prop)) {
+                    var cur_name =  item[prop].memberIp,
+                        clusterId = item[prop].clusterId,
+                        type = 'member',
+                            memberId = item[prop].memberId,
+                            status = item[prop].status,
+                            memberPublicIp = item[prop].memberPublicIp,
+                            partitionId = item[prop].partitionId;
+                    rawout.push({"name": cur_name, "parent": parent, "clusterId":clusterId, "type":type,
+                                "memberId":memberId, "status": status, "memberPublicIp":memberPublicIp,
+                                "partitionId":partitionId
+                                });
+                }
+
+            }
+
         }
 
         function secondarylevelgroups(item, collector, parent){
             for (var prop in item) {
                 if (item.hasOwnProperty(prop)) {
                     var cur_name =  item[prop].alias;
+                    console.log(cur_name)
+                    var type = 'groups';
+                    rawout.push({"name": cur_name, "parent": parent, "type":type});
                     if(item[prop].hasOwnProperty('subGroups')){
-                        rawout.push({"name": cur_name, "parent": parent});
+                        secondarylevelgroups(item[prop].subGroups, rawout, cur_name);
                     }
                     secondorylevelclusters(item[prop].clusters, rawout, cur_name);
-                    secondarylevelgroups(item[prop].subGroups, rawout, cur_name);
+
                 }
             }
         }
 
         secondorylevelclusters(data.applications.clusters, rawout, data.applications.id);
         secondarylevelgroups(data.applications.groups, rawout, data.applications.id);
-
+        console.log(JSON.stringify(rawout))
         return rawout;
+
     }
 
 
     //generate tree from raw data isurudata, test_app, originaldata
-    var data = genTree(test_app);
+    var data = genTree(isurudata);
     var dataMap = data.reduce(function(map, node) {
         map[node.name] = node;
         return map;
@@ -478,7 +550,8 @@
             .append("g")
             .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-
+    var i = 0;
+    duration = 750;
 
     root = treeData[0];
 
@@ -500,14 +573,91 @@
         // Enter the nodes.
         var nodeEnter = node.enter().append("g")
                 .attr("class", "node")
-                .on("mouseover", mouseover)
-                .on("mouseout", mouseout)
                 .attr("transform", function(d) {
-                    return "translate(" + d.x + "," + d.y + ")"; });
+                    return "translate(" + d.x + "," + d.y + ")"; })
+            // add tool tip for ps -eo pid,ppid,pcpu,size,comm,ruser,s
+                .on("mouseover", function(d) {
+                    div.transition()
+                            .duration(200)
+                            .style("opacity", .9);
 
-        nodeEnter.append("circle")
-                .attr("r", 10)
-                .style("fill", "#fff");
+                        if(d.type == 'cluster') {
+                            div.html(
+                                "<strong>Cluster ID: </strong>" + d.clusterId + "<br/>"+
+                                 "<strong>Is Lb Cluster: </strong>" + d.isLbCluster
+                            ).style("left", (d3.event.pageX) + "px")
+                                    .style("top", (d3.event.pageY - 28) + "px");
+                        }else if(d.type == 'member'){
+                            div.html(
+                                            "<strong>Cluster Id: </strong>" + d.clusterId + "<br/>" +
+                                            "<strong>Partition Id: </strong>" + d.partitionId + "<br/>" +
+                                            "<strong>Member Id: </strong>" + d.memberId + "<br/>" +
+                                            "<strong>Member Public Ip: </strong>" + d.memberPublicIp
+                            ).style("left", (d3.event.pageX) + "px")
+                                    .style("top", (d3.event.pageY - 28) + "px");
+                        }else{
+                            div.html(
+                                            "<strong>Alias: </strong>" + d.name + "<br/>"
+                            ).style("left", (d3.event.pageX) + "px")
+                                    .style("top", (d3.event.pageY - 28) + "px");
+                        }
+
+                })
+                .on("mouseout", function(d) {
+                    div.transition()
+                            .duration(500)
+                            .style("opacity", 0);
+                });
+
+//        nodeEnter.append("circle")
+//                .attr("r", 10)
+//                .style("fill", "#fff");
+        //add different sapes to it
+/*        nodeEnter.append("path")
+                .style("stroke", "black")
+                .style("fill", function(d) {
+                    if (d.type == 'cluster') {
+                        return "green";
+                    } else if (d.type == 'groups') {
+                        return "red";
+                    } else if (d.type == 'member'){
+                        return "blue";
+                    }else{
+                        return "triangle-up";
+                    }
+                })
+                .attr("d", d3.svg.symbol()
+                        .size(200)
+                        .type(function(d) {
+                            if (d.type == 'cluster') {
+                                return "circle";
+                            } else if (d.type == 'groups') {
+                                return "square";
+                            } else if (d.type == 'member'){
+                                return "diamond";
+                             }else{
+                                return "triangle-up";
+                            }
+                        }));*/
+
+        nodeEnter.append("svg:image")
+                .attr( "xlink:href",
+                function(d) {
+                    if (d.type == 'cluster') {
+                        return "images/cluster.svg";
+                    } else if (d.type == 'groups') {
+                        return "images/group.svg";
+                    } else if (d.type == 'member'){
+                        return "images/member.svg";
+                    }else{
+                        return "images/test.svg";
+                    }})
+                .attr("x", -10)
+                .attr("y", -10)
+                .attr("width", 20)
+                .attr("height", 20);
+
+
 
         nodeEnter.append("text")
                 .attr("y", function(d) {
@@ -517,6 +667,11 @@
                 .text(function(d) { return d.name; })
                 .style("fill-opacity", 1);
 
+        // add the tool tip
+        var div = d3.select("body").append("div")
+                .attr("class", "tooltip")
+                .style("opacity", 0);
+
         // Declare the links…
         var link = svg.selectAll("path.link")
                 .data(links, function(d) { return d.target.id; });
@@ -525,21 +680,6 @@
         link.enter().insert("path", "g")
                 .attr("class", "link")
                 .attr("d", diagonal);
-
-
-        function mouseover(d) {
-            d3.select(this).append("text")
-                    .attr("class", "hover")
-                    .attr('transform', function(d){
-                        return 'translate(5, -10)';
-                    })
-                    .text(d.name + ": " + d.Id);
-        }
-
-        // Toggle children on click.
-        function mouseout(d) {
-            d3.select(this).select("text.hover").remove();
-        }
 
     }
 
@@ -559,6 +699,19 @@
         fill: none;
         stroke: #ccc;
         stroke-width: 2px;
+    }
+
+    div.tooltip {
+        position: absolute;
+        text-align: left;
+        width: 20em;
+        padding: .8em;
+        margin:1em;
+        font: 12px sans-serif;
+        background: lightsteelblue;
+        border: 0px;
+        border-radius: 8px;
+        pointer-events: none;
     }
 </style>
 </html>
