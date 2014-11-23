@@ -32,21 +32,24 @@
                 {
                     "alias": "group5alias",
                     "autoScalingPolicy": "autoscale_policy_1",
-                    "clusters": {
-                        "serviceName": "tomcat",
+                    "clusters": [
+                        {
+                        "serviceName": "tomcat5",
                         "clusterId": "c1alias51.tomcat.domain",
                         "tenantRange": "*",
                         "hostNames": [
                             "c1alias51.isuruh.lk"
                         ],
                         "isLbCluster": false
-                    },
+                        }
+                    ],
                     "deploymentPolicy": "deployment_policy_1",
                     "subGroups": [
                         {
                             "alias": "group6alias",
                             "autoScalingPolicy": "autoscale_policy_1",
-                            "clusters": {
+                            "clusters": [
+                                {
                                 "serviceName": "tomcat",
                                 "clusterId": "c1alias61.tomcat.domain",
                                 "tenantRange": "*",
@@ -54,13 +57,15 @@
                                     "c1alias61.isuruh.lk"
                                 ],
                                 "isLbCluster": false
-                            },
+                                }
+                            ],
                             "deploymentPolicy": "deployment_policy_1",
                             "subGroups": [
                                 {
                                     "alias": "group7alias",
                                     "autoScalingPolicy": "autoscale_policy_1",
-                                    "clusters": {
+                                    "clusters": [
+                                        {
                                         "serviceName": "tomcat",
                                         "clusterId": "c1alias71.tomcat.domain",
                                         "member": [
@@ -90,14 +95,91 @@
                                             "c1alias71.isuruh.lk"
                                         ],
                                         "isLbCluster": false
-                                    },
+                                        }
+                                    ],
                                     "deploymentPolicy": "deployment_policy_1"
                                 }
                             ]
                         }
                     ]
-                }],
-            "clusters": [{
+                },
+                {
+                    "alias": "group2alias",
+                    "autoScalingPolicy": "autoscale_policy_1",
+                    "clusters": [
+                        {
+                        "serviceName": "tomcat",
+                        "clusterId": "c1alias51.tomcat.domain",
+                        "tenantRange": "*",
+                        "hostNames": [
+                            "c1alias51.isuruh.lk"
+                        ],
+                        "isLbCluster": false
+                        }
+                    ],
+                    "deploymentPolicy": "deployment_policy_1",
+                    "subGroups": [
+                        {
+                            "alias": "group8alias",
+                            "autoScalingPolicy": "autoscale_policy_1",
+                            "clusters": [
+                                {
+                                "serviceName": "tomcat",
+                                "clusterId": "c1alias61.tomcat.domain",
+                                "tenantRange": "*",
+                                "hostNames": [
+                                    "c1alias61.isuruh.lk"
+                                ],
+                                "isLbCluster": false
+                            }
+                        ],
+                            "deploymentPolicy": "deployment_policy_1",
+                            "subGroups": [
+                                {
+                                    "alias": "group7alias",
+                                    "autoScalingPolicy": "autoscale_policy_1",
+                                    "clusters": [
+                                        {
+                                        "serviceName": "tomcat",
+                                        "clusterId": "c1alias71.tomcat.domain",
+                                        "member": [
+                                            {
+                                                "serviceName": "tomcat",
+                                                "clusterId": "c1alias71.tomcat.domain",
+                                                "networkPartitionId": "openstack",
+                                                "partitionId": "P1",
+                                                "memberId": "c1alias71.tomcat.domain6ecc9aa9-5452-478a-8f0b-1475a47a9a5d",
+                                                "status": "Created",
+                                                "memberIp": "10.0.0.84",
+                                                "memberPublicIp": "192.168.17.117",
+                                                "property": [
+                                                    {
+                                                        "name": "PRIMARY",
+                                                        "value": false
+                                                    },
+                                                    {
+                                                        "name": "MIN_COUNT",
+                                                        "value": 1
+                                                    }
+                                                ]
+                                            }
+                                        ],
+                                        "tenantRange": "*",
+                                        "hostNames": [
+                                            "c1alias71.isuruh.lk"
+                                        ],
+                                        "isLbCluster": false
+                                    }
+                                    ],
+                                    "deploymentPolicy": "deployment_policy_1"
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ],
+            "clusters": [
+                {
                 "serviceName": "tomcat",
                 "clusterId": "c1xxx.tomcat.domain",
                 "member": [
@@ -129,7 +211,7 @@
                 "isLbCluster": false
             },
                 {
-                    "serviceName": "tomcat",
+                    "serviceName": "tomcat2",
                     "clusterId": "c1alias71.tomcat.domain",
                     "member": [
                         {
@@ -163,6 +245,113 @@
             "id": "test_app5",
             "tenantAdminUsername": "admin",
             "tenantDomain": "carbon.super"
+        }
+    };
+
+    var isurudata = {
+        "applications":{
+            "groups":[{
+                "alias":"group5alias",
+                "autoScalingPolicy":"autoscale_policy_1",
+                "clusters":[{
+                    "serviceName":"tomcat",
+                    "clusterId":"c1alias51.tomcat.domain",
+                    "tenantRange":"*",
+                    "hostNames":[
+                        "c1alias51.isuruh.lk"
+                    ],
+                    "isLbCluster":false
+                }],
+                "deploymentPolicy":"deployment_policy_1",
+                "subGroups":[
+                    {
+                        "alias":"group6alias",
+                        "autoScalingPolicy":"autoscale_policy_1",
+                        "clusters":[{
+                            "serviceName":"tomcat",
+                            "clusterId":"c1alias61.tomcat.domain",
+                            "tenantRange":"*",
+                            "hostNames":[
+                                "c1alias61.isuruh.lk"
+                            ],
+                            "isLbCluster":false
+                        }],
+                        "deploymentPolicy":"deployment_policy_1",
+                        "subGroups":[
+                            {
+                                "alias":"group7alias",
+                                "autoScalingPolicy":"autoscale_policy_1",
+                                "clusters":[{
+                                    "serviceName":"tomcat",
+                                    "clusterId":"c1alias71.tomcat.domain",
+                                    "member":[
+                                        {
+                                            "serviceName":"tomcat",
+                                            "clusterId":"c1alias71.tomcat.domain",
+                                            "networkPartitionId":"openstack",
+                                            "partitionId":"P1",
+                                            "memberId":"c1alias71.tomcat.domain6ecc9aa9-5452-478a-8f0b-1475a47a9a5d",
+                                            "status":"Created",
+                                            "memberIp":"10.0.0.84",
+                                            "memberPublicIp":"192.168.17.117",
+                                            "property":[
+                                                {
+                                                    "name":"PRIMARY",
+                                                    "value":false
+                                                },
+                                                {
+                                                    "name":"MIN_COUNT",
+                                                    "value":1
+                                                }
+                                            ]
+                                        }
+                                    ],
+                                    "tenantRange":"*",
+                                    "hostNames":[
+                                        "c1alias71.isuruh.lk"
+                                    ],
+                                    "isLbCluster":false
+                                }],
+                                "deploymentPolicy":"deployment_policy_1"
+                            }
+                        ]
+                    }
+                ]
+            }],
+            "clusters":[{
+                "serviceName":"tomcat",
+                "clusterId":"c1xxx.tomcat.domain",
+                "member":[
+                    {
+                        "serviceName":"tomcat",
+                        "clusterId":"c1xxx.tomcat.domain",
+                        "networkPartitionId":"openstack",
+                        "partitionId":"P1",
+                        "memberId":"c1xxx.tomcat.domain39a371ff-1866-4a0a-8c82-1130de8dc937",
+                        "status":"Activated",
+                        "memberIp":"10.0.0.78",
+                        "memberPublicIp":"192.168.17.165",
+                        "property":[
+                            {
+                                "name":"PRIMARY",
+                                "value":false
+                            },
+                            {
+                                "name":"MIN_COUNT",
+                                "value":1
+                            }
+                        ]
+                    }
+                ],
+                "tenantRange":"*",
+                "hostNames":[
+                    "c1xxx.isuruh.lk"
+                ],
+                "isLbCluster":false
+            }],
+            "id":"test_app5",
+            "tenantAdminUsername":"admin",
+            "tenantDomain":"carbon.super"
         }
     };
 
@@ -204,6 +393,72 @@
         }
     ];
 
+
+    var test_app = {"applications":{"groups":[{"alias":"mygroup2","autoScalingPolicy":"autoscale_policy_group2","clusters":[{"serviceName":"tomcat1","clusterId":"tomcat1.domain","tenantRange":"*","hostNames":["isuruh.lk"],"isLbCluster":false}],"deploymentPolicy":"dep_policy_group2","subGroups":[{"alias":"mygroup1","autoScalingPolicy":"autoscale_policy_group1","clusters":[{"serviceName":"tomcat2","clusterId":"tomcat2.domain","tenantRange":"*","hostNames":["isuruh.lk"],"isLbCluster":false}],"deploymentPolicy":"dep_policy_group1"}]}],"clusters":[{"serviceName":"tomcat","clusterId":"tomcat.domain","tenantRange":"*","hostNames":["isuruh.lk"],"isLbCluster":false}],"id":"test_app_1","tenantAdminUsername":"admin","tenantDomain":"carbon.super"}};
+    //create JSON from topology
+
+
+
+    function genTree(data) {
+
+        var rawout = [];
+
+        var rootnode ={};
+        rootnode.name = data.applications.id;
+        rootnode.parent = null;
+        //create initial root node
+        rawout.push(rootnode);
+
+        function secondorylevelclusters(item, collector, parent){
+            for (var prop in item) {
+                if (item.hasOwnProperty(prop)) {
+                    var cur_name =  item[prop].serviceName;
+                    rawout.push({"name": cur_name, "parent": parent});
+                }
+            }
+        }
+
+        function secondarylevelgroups(item, collector, parent){
+            for (var prop in item) {
+                if (item.hasOwnProperty(prop)) {
+                    var cur_name =  item[prop].alias;
+                    if(item[prop].hasOwnProperty('subGroups')){
+                        rawout.push({"name": cur_name, "parent": parent});
+                    }
+                    secondorylevelclusters(item[prop].clusters, rawout, cur_name);
+                    secondarylevelgroups(item[prop].subGroups, rawout, cur_name);
+                }
+            }
+        }
+
+        secondorylevelclusters(data.applications.clusters, rawout, data.applications.id);
+        secondarylevelgroups(data.applications.groups, rawout, data.applications.id);
+
+        return rawout;
+    }
+
+
+    //generate tree from raw data isurudata, test_app, originaldata
+    var data = genTree(test_app);
+    var dataMap = data.reduce(function(map, node) {
+        map[node.name] = node;
+        return map;
+    }, {});
+    var treeData = [];
+    data.forEach(function(node) {
+        // add to parent
+        var parent = dataMap[node.parent];
+        if (parent) {
+            // create child array if it doesn't exist
+            (parent.children || (parent.children = []))
+                // add node to child array
+                    .push(node);
+        } else {
+            // parent is null or missing
+            treeData.push(node);
+        }
+    });
+
     // ************** Generate the tree diagram	 *****************
     var margin = {top: 40, right: 120, bottom: 20, left: 120},
             width = 960 - margin.right - margin.left,
@@ -223,6 +478,8 @@
             .append("g")
             .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
+
+
     root = treeData[0];
 
     update(root);
@@ -234,7 +491,7 @@
                 links = tree.links(nodes);
 
         // Normalize for fixed-depth.
-        nodes.forEach(function(d) { d.y = d.depth * 50; });
+        nodes.forEach(function(d) { d.y = d.depth * 80; });
 
         // Declare the nodes…
         var node = svg.selectAll("g.node")
@@ -285,9 +542,6 @@
         }
 
     }
-
-
-
 
     </script>
 
