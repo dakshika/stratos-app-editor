@@ -23,7 +23,37 @@
 
 
 </body>
+<style type="text/css">
 
+    .node rect {
+        fill: #fff;
+    }
+
+    .node text { font: 12px sans-serif; }
+
+    .link {
+        fill: none;
+        stroke: #ccc;
+        stroke-width: 2px;
+    }
+
+    div.tooltip {
+        position: absolute;
+        text-align: left;
+        width: 20em;
+        padding: .8em;
+        margin:1em;
+        font: 12px sans-serif;
+        background: lightsteelblue;
+        border: 0px;
+        border-radius: 8px;
+        pointer-events: none;
+    }
+
+    .cluster{
+        background-color: red;
+    }
+</style>
 <script type="text/javascript">
 
     var originaldata = {
@@ -274,6 +304,27 @@
                             "hostNames":[
                                 "c1alias61.isuruh.lk"
                             ],
+                            "member":[
+                                {
+                                    "serviceName":"tomcat",
+                                    "clusterId":"c1alias71.tomcat.domain",
+                                    "networkPartitionId":"openstack",
+                                    "partitionId":"P1",
+                                    "memberId":"c1alias71.tomcat.domain6ecc9aa9-5452-478a-8f0b-1475a47a9a5d",
+                                    "status":"Created",
+                                    "memberIp":"10.0.0.84",
+                                    "memberPublicIp":"192.168.17.117",
+                                    "property":[
+                                        {
+                                            "name":"PRIMARY",
+                                            "value":false
+                                        },
+                                        {
+                                            "name":"MIN_COUNT",
+                                            "value":1
+                                        }
+                                    ]
+                                }],
                             "isLbCluster":false
                         }],
                         "deploymentPolicy":"deployment_policy_1",
@@ -639,29 +690,45 @@
                                 return "triangle-up";
                             }
                         }));*/
+        nodeEnter.append("rect")
+                .attr("x", -15)
+                .attr("y", -15)
+                .attr("width", 30)
+                .attr("height", 30)
+                .style("fill",function(d) {
+                    if (d.type == 'cluster') {
+                        return "#e74c3c";
+                    } else if (d.type == 'groups') {
+                        return "#2ecc71";
+                    } else if (d.type == 'member'){
+                        return "#9b59b6";
+                    }else{
+                        return "#1abc9c";
+                    }});
 
-        nodeEnter.append("svg:image")
+        nodeEnter.append("image")
                 .attr( "xlink:href",
                 function(d) {
                     if (d.type == 'cluster') {
-                        return "images/cluster.svg";
+                        return "images/cluster.png";
                     } else if (d.type == 'groups') {
-                        return "images/group.svg";
+                        return "images/group.png";
                     } else if (d.type == 'member'){
-                        return "images/member.svg";
+                        return "images/member.png";
                     }else{
-                        return "images/test.svg";
+                        return "images/application.png";
                     }})
-                .attr("x", -10)
-                .attr("y", -10)
-                .attr("width", 20)
-                .attr("height", 20);
+                .attr("class","created")
+                .attr("x", -16)
+                .attr("y", -16)
+                .attr("width", 32)
+                .attr("height", 32);
 
 
 
         nodeEnter.append("text")
                 .attr("y", function(d) {
-                    return d.children || d._children ? -18 : 18; })
+                    return d.children || d._children ? -20 : 20; })
                 .attr("dy", ".35em")
                 .attr("text-anchor", "middle")
                 .text(function(d) { return d.name; })
@@ -685,33 +752,5 @@
 
     </script>
 
-<style type="text/css">
 
-    .node circle {
-        fill: #fff;
-        stroke: steelblue;
-        stroke-width: 3px;
-    }
-
-    .node text { font: 12px sans-serif; }
-
-    .link {
-        fill: none;
-        stroke: #ccc;
-        stroke-width: 2px;
-    }
-
-    div.tooltip {
-        position: absolute;
-        text-align: left;
-        width: 20em;
-        padding: .8em;
-        margin:1em;
-        font: 12px sans-serif;
-        background: lightsteelblue;
-        border: 0px;
-        border-radius: 8px;
-        pointer-events: none;
-    }
-</style>
 </html>

@@ -1,0 +1,152 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Apache application heirache</title>
+    <script src="js/jquery-1.11.1/jquery-1.11.1.min.js"></script>
+    <!--<script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.9.2/jquery-ui.min.js"></script>-->
+    <script src="js/jsplumb-1.7.2/dom.jsPlumb-1.7.2-min.js"></script>
+    <script src="js/d3js-v3/d3.v3.min.js" charset="utf-8"></script>
+    <link rel="stylesheet" href="css/style.css">
+    <!--[if lt IE 9]>
+    <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+</head>
+
+<body>
+<h2>Apache Stratos Application Editor</h2>
+
+<div class="application-creator">
+    <div class="left-side">
+
+    </div>
+    <div class="right-side">
+        <div id="whiteboard">
+
+            <div id="container1" class="stepnode">Application
+            </div>
+            <div id="container2" class="stepnode">Group
+            </div>
+            <div id="container3" class="stepnode">Cartridge
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
+</body>
+<style type="text/css">
+    .stepnode {
+        border:1px solid black;
+        position:absolute !important;
+        width:5em;
+        height:5em;
+        padding: 0.5em;
+        z-index:1;
+        border-radius:0.5em;
+        box-shadow: 2px 2px 19px #aaa;
+        background: white;
+    }
+
+    /*#container1 { top:10em; left:40em;}*/
+    /*#container2 { top:25em; left:22em;}*/
+    /*#container3 { top:25em; left:40em;}*/
+
+    .dragActive {
+        border: 2px dotted orange;
+    }
+    #whiteboard {
+        width: 500px;
+        height: 500px;
+        background-color: darkgrey;
+        margin-left: 200px;
+        position: absolute;
+    }
+
+</style>
+<script>
+    // init draggable and resizable on elements
+    $(document).ready(function(){
+        DragEl(".stepnode");
+        ResizeEl(".stepnode");
+        Repaint();
+    });
+
+    //// functions ////
+
+    // repaint
+    function Repaint(){
+        $("#whiteboard").resize(function(){
+            jsPlumb.repaintEverything();
+        });
+    }
+    // resize
+    function ResizeEl(el){
+        $(el).resizable();
+    }
+    // drag
+    function DragEl(el){
+        jsPlumb.draggable($(el) ,{
+            containment:"parent"
+        });
+    }
+
+
+    // JsPlumb Config
+    var color = "gray",
+            exampleColor = "#00f",
+            arrowCommon = { foldback:0.7, fillStyle:color, width:14 };
+
+    jsPlumb.importDefaults({
+        Connector : [ "Bezier", { curviness:50 } ],
+        Overlays: [
+            [ "Arrow", { location:0.7 }, arrowCommon ],
+        ]
+    });
+
+
+    var exampleDropOptions = {
+        activeClass:"dragActive"
+    };
+
+    var exampleGreyEndpointOptions = {
+        endpoint:"Rectangle",
+        paintStyle:{ width:25, height:21, fillStyle:'#666' },
+        isSource:true,
+        connectorStyle : { strokeStyle:"#666" },
+        isTarget:false,
+        maxConnections:5
+    };
+
+    var endpointOptions = {
+        isTarget:true,
+        endpoint:"Dot",
+        paintStyle:{
+            fillStyle:"gray"
+        },
+        dropOptions: exampleDropOptions,
+        maxConnections:5
+    };
+
+
+    jsPlumb.ready(function() {
+
+
+        jsPlumb.addEndpoint('container1', {
+            anchor:"BottomCenter"
+        }, exampleGreyEndpointOptions);
+
+        jsPlumb.addEndpoint("container2", {
+            anchor: "TopCenter"
+        }, endpointOptions);
+
+        jsPlumb.addEndpoint("container3", {
+            anchor: "TopCenter"
+        }, endpointOptions);
+
+    });
+
+</script>
+</html>
