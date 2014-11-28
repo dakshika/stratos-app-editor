@@ -5,9 +5,11 @@
     <title>Apache application heirache</title>
     <script src="js/jquery-1.11.1/jquery-1.11.1.min.js"></script>
     <!--<script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.9.2/jquery-ui.min.js"></script>-->
+    <script src="js/bootstrap-3.2.0/bootstrap.min.js"></script>
     <script src="js/jsplumb-1.7.2/dom.jsPlumb-1.7.2-min.js"></script>
     <script src="js/d3js-v3/d3.v3.min.js" charset="utf-8"></script>
     <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/bootstrap-3.2.0/bootstrap.min.css">
     <!--[if lt IE 9]>
     <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
@@ -15,57 +17,64 @@
 </head>
 
 <body>
-<h2>Apache Stratos Application Editor</h2>
 
-<div class="application-creator">
-    <div class="left-side">
-
+<div class="container">
+    <div class="row">
+        <h2>Apache Stratos Application Editor</h2>
     </div>
-    <div class="right-side">
-        <div id="whiteboard">
+    <div class="row">
+        <div class="application-creator">
+            <div class="left-side">
+                <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+                    <div class="panel panel-default">
+                        <div class="panel-heading" role="tab" id="headingOne">
+                            <h4 class="panel-title">
+                                <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                                    Cartridges
+                                </a>
+                            </h4>
+                        </div>
+                        <div id="collapseOne" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
+                            <div class="panel-body">
 
-            <div id="container1" class="stepnode">Application
+                            </div>
+                        </div>
+                    </div>
+                    <div class="panel panel-default">
+                        <div class="panel-heading" role="tab" id="headingTwo">
+                            <h4 class="panel-title">
+                                <a class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                                    Groups
+                                </a>
+                            </h4>
+                        </div>
+                        <div id="collapseTwo" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">
+                            <div class="panel-body">
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div id="container2" class="stepnode">Group
+            <div class="right-side">
+                <div id="whiteboard">
+
+                    <div id="container1" class="stepnode">Application
+                    </div>
+                    <div id="container2" class="stepnode">Group
+                    </div>
+                    <div id="container3" class="stepnode">Cartridge
+                    </div>
+                </div>
             </div>
-            <div id="container3" class="stepnode">Cartridge
-            </div>
+
         </div>
     </div>
-
 </div>
 
 
+
 </body>
-<style type="text/css">
-    .stepnode {
-        border:1px solid black;
-        position:absolute !important;
-        width:5em;
-        height:5em;
-        padding: 0.5em;
-        z-index:1;
-        border-radius:0.5em;
-        box-shadow: 2px 2px 19px #aaa;
-        background: white;
-    }
-
-    /*#container1 { top:10em; left:40em;}*/
-    /*#container2 { top:25em; left:22em;}*/
-    /*#container3 { top:25em; left:40em;}*/
-
-    .dragActive {
-        border: 2px dotted orange;
-    }
-    #whiteboard {
-        width: 500px;
-        height: 500px;
-        background-color: darkgrey;
-        margin-left: 200px;
-        position: absolute;
-    }
-
-</style>
 <script>
     // init draggable and resizable on elements
     $(document).ready(function(){
@@ -147,6 +156,8 @@
         }, endpointOptions);
 
     });
+
+    console.dir(jsPlumb.getConnections())
 
 </script>
 </html>
