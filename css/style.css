@@ -32,3 +32,21 @@
 .right-side {
     margin: 10px;
 }
+
+.block-cartridge {
+    width: 70px;
+    height: 70px;
+    background-color: rgb(109, 123, 112);
+    float: left;
+    margin: 5px;
+    padding: 10px;
+}
+
+.block-group {
+    width: 70px;
+    height: 70px;
+    background-color: rgb(109, 123, 112);
+    float: left;
+    margin: 5px;
+    padding: 10px;
+}

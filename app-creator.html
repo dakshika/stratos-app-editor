@@ -29,13 +29,24 @@
                     <div class="panel panel-default">
                         <div class="panel-heading" role="tab" id="headingOne">
                             <h4 class="panel-title">
-                                <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                                <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne"
+                                   aria-expanded="true" aria-controls="collapseOne">
                                     Cartridges
                                 </a>
                             </h4>
                         </div>
-                        <div id="collapseOne" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
+                        <div id="collapseOne" class="panel-collapse collapse in" role="tabpanel"
+                             aria-labelledby="headingOne">
                             <div class="panel-body">
+                                <div class="block-cartridge" id="php">
+                                    PHP
+                                </div>
+                                <div class="block-cartridge" id="tomcat">
+                                    Tomcat
+                                </div>
+                                <div class="block-cartridge" id="nodejs">
+                                    Nodejs
+                                </div>
 
                             </div>
                         </div>
@@ -43,14 +54,24 @@
                     <div class="panel panel-default">
                         <div class="panel-heading" role="tab" id="headingTwo">
                             <h4 class="panel-title">
-                                <a class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                                <a class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo"
+                                   aria-expanded="false" aria-controls="collapseTwo">
                                     Groups
                                 </a>
                             </h4>
                         </div>
-                        <div id="collapseTwo" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">
+                        <div id="collapseTwo" class="panel-collapse collapse" role="tabpanel"
+                             aria-labelledby="headingTwo">
                             <div class="panel-body">
-
+                                <div class="block-group" id="group1">
+                                    Group 1
+                                </div>
+                                <div class="block-group" id="group2">
+                                    Group2
+                                </div>
+                                <div class="block-group" id="group3">
+                                    Group3
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -79,7 +100,7 @@
     // init draggable and resizable on elements
     $(document).ready(function(){
         DragEl(".stepnode");
-        ResizeEl(".stepnode");
+        //ResizeEl(".stepnode");
         Repaint();
     });
 
@@ -109,10 +130,10 @@
             arrowCommon = { foldback:0.7, fillStyle:color, width:14 };
 
     jsPlumb.importDefaults({
-        Connector : [ "Bezier", { curviness:50 } ],
-        Overlays: [
+        Connector : [ "Bezier", { curviness:63 } ],
+        /*Overlays: [
             [ "Arrow", { location:0.7 }, arrowCommon ],
-        ]
+        ]*/
     });
 
 
@@ -155,7 +176,65 @@
             anchor: "TopCenter"
         }, endpointOptions);
 
+        $('.block-cartridge').on('click', function(){
+            addCartridge($(this).attr('id'));
+        })
+
+        $('.block-group').on('click', function(){
+            addGroup($(this).attr('id'));
+        })
+
+
     });
+
+    function addCartridge(idname) {
+        var Div = $('<div>').text(idname).appendTo('#whiteboard');
+        $(Div).addClass('stepnode');
+        jsPlumb.addEndpoint($(Div), {
+            anchor: "TopCenter"
+        }, endpointOptions);
+       // jsPlumb.addEndpoint($(Div), sourceEndpoint);
+        jsPlumb.draggable($(Div));
+
+        DragEl(".stepnode");
+        Repaint();
+        console.log('me hitted')
+    }
+
+    function addGroup(idname) {
+        var Div = $('<div>').text(idname).appendTo('#whiteboard');
+        var Div2 = $('<div>').text(idname).appendTo('#whiteboard');
+
+        $(Div).addClass('stepnode');
+        jsPlumb.addEndpoint($(Div), {
+            anchor: "TopCenter"
+        }, endpointOptions);
+        jsPlumb.addEndpoint($(Div), {
+            anchor:"BottomCenter"
+        }, exampleGreyEndpointOptions);
+
+        $(Div2).addClass('stepnode');
+        jsPlumb.addEndpoint($(Div2), {
+            anchor: "TopCenter"
+        }, endpointOptions);
+        // jsPlumb.addEndpoint($(Div), sourceEndpoint);
+        jsPlumb.draggable($(Div2));
+
+        jsPlumb.connect({
+            source:$(Div),
+            target:$(Div2),
+            paintStyle:{ width:25, height:21, fillStyle:'#666' },
+            Connector : [ "Bezier", { curviness:63 } ],
+            endpoint:"Dot"
+        });
+        // jsPlumb.addEndpoint($(Div), sourceEndpoint);
+        jsPlumb.draggable($(Div));
+        jsPlumb.draggable($(Div2));
+        DragEl(".stepnode");
+        Repaint();
+    }
+
+
 
     console.dir(jsPlumb.getConnections())
 
