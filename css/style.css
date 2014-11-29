@@ -28,6 +28,7 @@
     background-color: rgb(244, 244, 244);
     margin-left: 200px;
     position: absolute;
+    background-image: url("../images/grid.png");
 }
 .right-side {
     margin: 10px;
