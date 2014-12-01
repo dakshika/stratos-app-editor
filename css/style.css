@@ -13,6 +13,7 @@
     border-radius:0.5em;
     box-shadow: 2px 2px 19px #aaa;
     background: white;
+    word-wrap: break-word;
 }
 
 /*#container1 { top:10em; left:40em;}*/
@@ -24,7 +25,7 @@
 }
 #whiteboard {
     width: 700px;
-    height: 700px;
+    height: 600px;
     background-color: rgb(244, 244, 244);
     margin-left: 200px;
     position: absolute;
@@ -41,6 +42,7 @@
     float: left;
     margin: 5px;
     padding: 10px;
+    word-wrap: break-word;
 }
 
 .block-group {
@@ -50,4 +52,8 @@
     float: left;
     margin: 5px;
     padding: 10px;
+    word-wrap: break-word;
+}
+.bottom-tabs{
+    margin-top: 605px;
 }

@@ -1,0 +1,32 @@
+{
+    "cartridge":[
+        {
+            "activeInstances":0,
+            "cartridgeAlias":"-",
+            "cartridgeType":"php",
+            "description":"PHP Cartridge",
+            "displayName":"PHP",
+            "hostName":"stratos.com",
+            "isPublic":false,
+            "loadBalancer":false,
+            "multiTenant":true,
+            "persistance":false,
+            "provider":"apache",
+            "version":7
+        },
+        {
+            "activeInstances":0,
+            "cartridgeAlias":"-",
+            "cartridgeType":"tomcat",
+            "description":"PHP Cartridge",
+            "displayName":"PHP",
+            "hostName":"isuruh.lk",
+            "isPublic":false,
+            "loadBalancer":false,
+            "multiTenant":true,
+            "persistance":false,
+            "provider":"tomcat",
+            "version":7
+        }
+    ]
+}

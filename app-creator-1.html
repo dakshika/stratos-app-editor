@@ -8,7 +8,7 @@
     <script src="js/bootstrap-3.2.0/bootstrap.min.js"></script>
     <script src="js/jsplumb-1.7.2/dom.jsPlumb-1.7.2-min.js"></script>
     <script src="js/d3js-v3/d3.v3.min.js" charset="utf-8"></script>
-    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/app-creator-1.css">
     <link rel="stylesheet" href="css/bootstrap-3.2.0/bootstrap.min.css">
     <!--[if lt IE 9]>
     <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
@@ -17,14 +17,13 @@
 </head>
 
 <body>
-
 <div class="container">
     <div class="row">
         <h2>Apache Stratos Application Editor</h2>
     </div>
     <div class="row">
-        <div class="application-creator">
-            <div class="left-side">
+        <div class="left-side">
+            <div class="components">
                 <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
                     <div class="panel panel-default">
                         <div class="panel-heading" role="tab" id="headingOne">
@@ -37,7 +36,7 @@
                         </div>
                         <div id="collapseOne" class="panel-collapse collapse in" role="tabpanel"
                              aria-labelledby="headingOne">
-                            <div class="panel-body">
+                            <div class="panel-body component-section">
                                 <div class="block-cartridge" id="php">
                                     PHP
                                 </div>
@@ -51,7 +50,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="panel panel-default">
+                    <div class="panel panel-default ">
                         <div class="panel-heading" role="tab" id="headingTwo">
                             <h4 class="panel-title">
                                 <a class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo"
@@ -62,7 +61,7 @@
                         </div>
                         <div id="collapseTwo" class="panel-collapse collapse" role="tabpanel"
                              aria-labelledby="headingTwo">
-                            <div class="panel-body">
+                            <div class="panel-body component-section">
                                 <div class="block-group" id="group1">
                                     Group 1
                                 </div>
@@ -86,20 +85,54 @@
                     </div>
                 </div>
             </div>
-            <div class="right-side">
+            <div class="description" >
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Details</h3>
+                    </div>
+                    <div class="panel-body description-section">
+                        Topology view goes here
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="right-side">
+            <div class="app-creator">
                 <div id="whiteboard">
-                    <div id="container1" class="stepnode">Application
+                    <div id="container1" class="stepnode">
+                        Application
                     </div>
                 </div>
 
             </div>
+            <div class="app-details">
+                <div role="tabpanel app-details-tab" >
 
+                    <!-- Nav tabs -->
+                    <ul class="nav nav-tabs" role="tablist">
+                        <li role="presentation" class="active"><a href="#home" aria-controls="home" role="tab"
+                                                                  data-toggle="tab">General Details</a></li>
+                        <li role="presentation"><a href="#profile" aria-controls="profile"
+                                                   role="tab" data-toggle="tab">Components</a></li>
+                        <li role="presentation"><a href="#messages" aria-controls="messages"
+                                                   role="tab" data-toggle="tab">Subscribable Info</a></li>
+                        <li role="presentation"><a href="#settings" aria-controls="settings" role="tab" data-toggle="tab">Settings</a></li>
+                    </ul>
+
+                    <!-- Tab panes -->
+                    <div class="tab-content app-details-tab-content">
+                        <div role="tabpanel" class="tab-pane active" id="home">...</div>
+                        <div role="tabpanel" class="tab-pane" id="profile">...</div>
+                        <div role="tabpanel" class="tab-pane" id="messages">...</div>
+                        <div role="tabpanel" class="tab-pane" id="settings">...</div>
+                    </div>
+
+                </div>
+            </div>
         </div>
     </div>
 </div>
 
-
-
 </body>
-<script src="js/app-creator.js"></script>
+<script src="js/app-creator-1.js" ></script>
 </html>
