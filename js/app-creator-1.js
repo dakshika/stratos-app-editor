@@ -58,7 +58,7 @@ var endpointOptions = {
         fillStyle:"gray"
     },
     dropOptions: exampleDropOptions,
-    maxConnections:5
+    maxConnections:1
 };
 
 var groupOptions = {
@@ -124,7 +124,7 @@ function addGroup(idname) {
     jsPlumb.connect({
         source:$(Div),
         target:$(Div2),
-        paintStyle:{ width:25, height:21, fillStyle:'#666' },
+        paintStyle:{strokeStyle:"blue", lineWidth:1 },
         Connector : [ "Bezier", { curviness:63 } ],
         anchors:["BottomCenter", "TopCenter"],
         endpoint:"Dot"
