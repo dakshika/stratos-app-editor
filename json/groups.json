@@ -2,20 +2,14 @@
     "serviceGroup":[
         {
             "name":"group2",
-            "groups":[
-                {
+            "groups":[{
                     "name":"group1",
-                    "cartridges":[
-                        "tomcat1"
-                    ],
+                    "cartridges":["tomcat1"],
                     "dependencies":{
                         "terminationBehaviour":"terminate-none"
                     }
-                }
-            ],
-            "cartridges":[
-                "tomcat"
-            ],
+                }],
+            "cartridges":["tomcat"],
             "dependencies":{
                 "startupOrders":[
                     "group1,tomcat"
@@ -27,9 +21,7 @@
             }
         },
         {
-            "cartridges":[
-                "php"
-            ],
+            "cartridges":["php", "dakshika"],
             "dependencies":{
                 "terminationBehaviour":"terminate-none"
             },
@@ -39,8 +31,22 @@
             "cartridges":[
                 "php, tomcat"
             ],
+            "groups":[{
+                "name":"group1",
+                "cartridges":["tomcat1"],
+                "dependencies":{
+                    "terminationBehaviour":"terminate-none"
+                },
+                "groups":[{
+                    "name":"group2",
+                    "cartridges":["tomcat2"],
+                    "dependencies":{
+                        "terminationBehaviour":"terminate-none"
+                    }
+                    }]
+            }],
             "dependencies":"",
-            "name":"groupsub"
+            "name":"group2nd"
         },
         {
             "cartridges":[

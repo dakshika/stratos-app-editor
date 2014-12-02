@@ -198,14 +198,62 @@ $(document).ready(function(){
         $('#group-list').append(groupListHtml);
     }
 
-    //handle single click for cartridge
+    //handle single click for groups
     $('#group-list').on('click', ".block-group", function(){
-        console.log(decodeURIComponent($(this).attr('data-info')))
-    });
+        var groupJSON = JSON.parse(decodeURIComponent($(this).attr('data-info')));
+        console.log(generateGroupTree(groupJSON))
 
+    });
+    //handle double click event for groups
     $('#group-list').on('dblclick', ".block-group", function(){
         addGroup($(this).attr('id'));
     });
+
+
+    //generate treefor Groups
+    function generateGroupTree(groupJSON){
+
+        var rawout = [];
+
+        var rootnode ={};
+        rootnode.name = groupJSON.name;
+        rootnode.parent = null;
+
+        rawout.push(rootnode);
+
+        function traverse(){
+
+        }
+
+        for (var prop in groupJSON) {
+            if(prop == 'cartridges'){
+                getCartridges(groupJSON[prop],rawout, groupJSON.name)
+            }
+            if(prop == 'groups'){
+                getGroups(groupJSON[prop], rawout, groupJSON.name)
+            }
+        }
+
+        function getCartridges(item, collector, parent){
+            for (var i = 0; i < item.length; i++) {
+                var type = 'cartridges';
+                var cur_name = item[i];
+                collector.push({"name": cur_name, "parent": parent, "type": type});
+            }
+        }
+
+        function getGroups(item, collector, parent){
+            for (var prop in item) {
+                var cur_name = item[prop]['name'];
+                var type = 'groups';
+                collector.push({"name": cur_name, "parent": parent, "type": type});
+                getCartridges(item[prop].cartridges, collector , cur_name);
+            }
+        }
+
+        return rawout;
+
+    }
 
 
 });
