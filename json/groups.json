@@ -44,7 +44,7 @@
         },
         {
             "cartridges":[
-                "tomcat"
+                "php"
             ],
             "dependencies":{
                 "terminationBehaviour":"terminate-all"
@@ -53,7 +53,7 @@
         },
         {
             "cartridges":[
-                "tomcat"
+                "nodejs"
             ],
             "dependencies":{
                 "terminationBehaviour":"terminate-none"

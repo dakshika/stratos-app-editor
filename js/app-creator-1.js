@@ -75,19 +75,18 @@ var groupOptions = {
 jsPlumb.ready(function() {
 
 
-    jsPlumb.addEndpoint('container1', {
+    jsPlumb.addEndpoint('applicationId', {
         anchor:"BottomCenter"
     }, exampleGreyEndpointOptions);
 
 
     $('.block-cartridge').on('dblclick', function(){
-        addCartridge($(this).attr('id'));
+    //    addCartridge($(this).attr('id'));
     })
 
     $('.block-group').on('dblclick', function(){
-        addGroup($(this).attr('id'));
+       // addGroup($(this).attr('id'));
     })
-
 
 });
 
@@ -100,7 +99,6 @@ function addCartridge(idname) {
     // jsPlumb.addEndpoint($(Div), sourceEndpoint);
     DragEl($(Div));
     Repaint();
-    console.log('me hitted')
 }
 
 function addGroup(idname) {
@@ -135,9 +133,81 @@ function addGroup(idname) {
 }
 
 $(document).ready(function(){
-    $('#whiteboard').on('click', '.stepnode', function(){
+
+    $('#whiteboard').on('dblclick', '.stepnode', function(){
         console.log('hit me')
+        activateTab('components')
     });
+
+    //use to activate tab
+    function activateTab(tab){
+        $('.nav-tabs a[href="#' + tab + '"]').tab('show');
+    };
+
+    //get create cartridge list
+    var cartridgeUrl = "json/cartridges.json";
+
+    $.getJSON(cartridgeUrl, function(data) {
+        generateCartridges(data.cartridge);
+    })
+
+    //create cartridge list
+    var cartridgeListHtml='';
+    function generateCartridges(data){
+        for(var cartridge in data){
+            var cartridgeData = data[cartridge];
+            cartridgeListHtml += '<div class="block-cartridge" ' +
+                'data-info="'+cartridgeData.description+ '"'+
+                'data-toggle="tooltip" data-placement="bottom" title="Single Click to view details. Double click to add"'+
+                'id="'+cartridgeData.displayName+'">'
+                + cartridgeData.displayName+
+                '</div>'
+        }
+        //append cartridge into html content
+       $('#cartridge-list').append(cartridgeListHtml);
+    }
+
+    //handle single click for cartridge
+    $('#cartridge-list').on('click', ".block-cartridge", function(){
+        $('.description-section').html($(this).attr('data-info'));
+    });
+    //handle double click for cartridge
+    $('#cartridge-list').on('dblclick', ".block-cartridge", function(){
+        addCartridge($(this).attr('id'));
+    });
+
+    //get group JSON
+    var groupUrl = "json/groups.json";
+
+    $.getJSON(groupUrl, function(data) {
+        generateGroups(data.serviceGroup);
+    });
+
+    //create group list
+    var groupListHtml='';
+    function generateGroups(data){
+        for(var group in data){
+            var groupData = data[group];
+            groupListHtml += '<div class="block-group" ' +
+                ' data-info="'+encodeURIComponent(JSON.stringify(groupData))+'"'+
+                'id="'+groupData.name+'">'
+                + groupData.name+
+                '</div>'
+        }
+        //append cartridge into html content
+        $('#group-list').append(groupListHtml);
+    }
+
+    //handle single click for cartridge
+    $('#group-list').on('click', ".block-group", function(){
+        console.log(decodeURIComponent($(this).attr('data-info')))
+    });
+
+    $('#group-list').on('dblclick', ".block-group", function(){
+        addGroup($(this).attr('id'));
+    });
+
+
 });
 
 

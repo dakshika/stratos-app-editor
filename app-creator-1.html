@@ -36,17 +36,8 @@
                         </div>
                         <div id="collapseOne" class="panel-collapse collapse in" role="tabpanel"
                              aria-labelledby="headingOne">
-                            <div class="panel-body component-section">
-                                <div class="block-cartridge" id="php">
-                                    PHP
-                                </div>
-                                <div class="block-cartridge" id="tomcat">
-                                    Tomcat
-                                </div>
-                                <div class="block-cartridge" id="nodejs">
-                                    Nodejs
-                                </div>
-
+                            <div class="panel-body component-section" id="cartridge-list">
+                            <!-- Automatic content will be added -->
                             </div>
                         </div>
                     </div>
@@ -61,25 +52,8 @@
                         </div>
                         <div id="collapseTwo" class="panel-collapse collapse" role="tabpanel"
                              aria-labelledby="headingTwo">
-                            <div class="panel-body component-section">
-                                <div class="block-group" id="group1">
-                                    Group 1
-                                </div>
-                                <div class="block-group" id="group2">
-                                    Group2
-                                </div>
-                                <div class="block-group" id="groupsub">
-                                    Group3
-                                </div>
-                                <div class="block-group" id="groupterminateall">
-                                    groupterminateall
-                                </div>
-                                <div class="block-group" id="groupsub">
-                                    groupsub
-                                </div>
-                                <div class="block-group" id="grouptomcat">
-                                    grouptomcat
-                                </div>
+                            <div class="panel-body component-section" id="group-list">
+                                <!-- group will automatically added -->
                             </div>
                         </div>
                     </div>
@@ -91,7 +65,7 @@
                         <h3 class="panel-title">Details</h3>
                     </div>
                     <div class="panel-body description-section">
-                        Topology view goes here
+
                     </div>
                 </div>
             </div>
@@ -99,8 +73,8 @@
         <div class="right-side">
             <div class="app-creator">
                 <div id="whiteboard">
-                    <div id="container1" class="stepnode">
-                        Application
+                    <div id="applicationId" class="stepnode">
+                        App Id
                     </div>
                 </div>
 
@@ -110,29 +84,30 @@
 
                     <!-- Nav tabs -->
                     <ul class="nav nav-tabs" role="tablist">
-                        <li role="presentation" class="active"><a href="#home" aria-controls="home" role="tab"
+                        <li role="presentation" class="active"><a href="#general" aria-controls="general" role="tab"
                                                                   data-toggle="tab">General Details</a></li>
-                        <li role="presentation"><a href="#profile" aria-controls="profile"
+                        <li role="presentation"><a href="#components" aria-controls="components"
                                                    role="tab" data-toggle="tab">Components</a></li>
                         <li role="presentation"><a href="#messages" aria-controls="messages"
-                                                   role="tab" data-toggle="tab">Subscribable Info</a></li>
-                        <li role="presentation"><a href="#settings" aria-controls="settings" role="tab" data-toggle="tab">Settings</a></li>
+                                                   role="tab" data-toggle="tab">JSON</a></li>
+
                     </ul>
 
                     <!-- Tab panes -->
                     <div class="tab-content app-details-tab-content">
-                        <div role="tabpanel" class="tab-pane active" id="home">
+                        <div role="tabpanel" class="tab-pane active" id="general">
                             <div class="form-group">
-                                <label for="inputPassword" class="col-sm-2 control-label">Application ID: </label>
-                                <div class="col-sm-10">
-                                    <input type="text" class="form-control" id="applicationId" placeholder="">
-                                </div>
+                                <label class="control-label" for="applicationId">Application Id:</label>
+                                <input type="text" class="form-control" placeholder="" id="applicationId">
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label" for="alias">Alias:</label>
+                                <input type="text" class="form-control" placeholder="" id="alias">
                             </div>
 
                         </div>
-                        <div role="tabpanel" class="tab-pane" id="profile">...</div>
+                        <div role="tabpanel" class="tab-pane" id="components">...</div>
                         <div role="tabpanel" class="tab-pane" id="messages">...</div>
-                        <div role="tabpanel" class="tab-pane" id="settings">...</div>
                     </div>
 
                 </div>
