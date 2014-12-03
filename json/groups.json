@@ -28,9 +28,7 @@
             "name":"group4"
         },
         {
-            "cartridges":[
-                "php, tomcat"
-            ],
+            "cartridges":["php", "tomcat"],
             "groups":[{
                 "name":"group1",
                 "cartridges":["tomcat1"],
@@ -65,6 +63,43 @@
                 "terminationBehaviour":"terminate-none"
             },
             "name":"grouptomcat"
+        },
+        {
+            "name":"group3Manula",
+            "groups":[
+                {
+                    "name":"group1",
+                    "groups":[
+                        {
+                            "name":"group4",
+                            "cartridges":[
+                                "tomcat"
+                            ],
+                            "dependencies":{
+                                "terminationBehaviour":"terminate-none"
+                            }
+                        }
+                    ],
+                    "cartridges":[
+                        "tomcat1"
+                    ],
+                    "dependencies":{
+                        "terminationBehaviour":"terminate-none"
+                    }
+                }
+            ],
+            "cartridges":[
+                "tomcat"
+            ],
+            "dependencies":{
+                "startupOrders":[
+                    "group1,tomcat"
+                ],
+                "terminationBehaviour":"terminate-dependents",
+                "scalingDependents":[
+                    "group1,tomcat"
+                ]
+            }
         }
     ]
 }
