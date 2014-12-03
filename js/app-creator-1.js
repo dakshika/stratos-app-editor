@@ -132,17 +132,18 @@ function addGroup(idname) {
     Repaint();
 }
 
+//use to activate tab
+function activateTab(tab){
+    $('.nav-tabs a[href="#' + tab + '"]').tab('show');
+};
+
+// Document ready events
 $(document).ready(function(){
 
     $('#whiteboard').on('dblclick', '.stepnode', function(){
-        console.log('hit me')
+        //get tab activated
         activateTab('components')
     });
-
-    //use to activate tab
-    function activateTab(tab){
-        $('.nav-tabs a[href="#' + tab + '"]').tab('show');
-    };
 
     //get create cartridge list
     var cartridgeUrl = "json/cartridges.json";
@@ -201,7 +202,8 @@ $(document).ready(function(){
     //handle single click for groups
     $('#group-list').on('click', ".block-group", function(){
         var groupJSON = JSON.parse(decodeURIComponent($(this).attr('data-info')));
-        console.log(generateGroupTree(groupJSON))
+        data = generateGroupTree(groupJSON);
+        generateGroupPreview(data);
 
     });
     //handle double click event for groups
@@ -218,12 +220,7 @@ $(document).ready(function(){
         var rootnode ={};
         rootnode.name = groupJSON.name;
         rootnode.parent = null;
-
         rawout.push(rootnode);
-
-        function traverse(){
-
-        }
 
         for (var prop in groupJSON) {
             if(prop == 'cartridges'){
@@ -248,6 +245,7 @@ $(document).ready(function(){
                 var type = 'groups';
                 collector.push({"name": cur_name, "parent": parent, "type": type});
                 getCartridges(item[prop].cartridges, collector , cur_name);
+                getGroups(item[prop].groups, collector, cur_name)
             }
         }
 
@@ -255,8 +253,93 @@ $(document).ready(function(){
 
     }
 
-
 });
 
 
-console.dir(jsPlumb.getConnections())
+// ************** Generate the tree diagram	 *****************
+function generateGroupPreview(data) {
+    $(".description-section").html('');
+    //clean current graph
+    d3.select("svg").remove();
+    //mapping data
+    var dataMap = data.reduce(function(map, node) {
+        map[node.name] = node;
+        return map;
+    }, {});
+    var treeData = [];
+    data.forEach(function(node) {
+        // add to parent
+        var parent = dataMap[node.parent];
+        if (parent) {
+            // create child array if it doesn't exist
+            (parent.children || (parent.children = []))
+                // add node to child array
+                .push(node);
+        } else {
+            // parent is null or missing
+            treeData.push(node);
+        }
+    });
+
+    var source = treeData[0];
+
+//generate position for tree view
+    var margin = {top: 25, right: 5, bottom: 5, left: 5},
+        width = 320 - margin.right - margin.left,
+        height = 500 - margin.top - margin.bottom;
+
+    var i = 0;
+
+    var tree = d3.layout.tree()
+        .size([height, width]);
+
+    var diagonal = d3.svg.diagonal()
+        .projection(function(d) { return [d.x, d.y]; });
+
+    var svg = d3.select(".description-section").append("svg")
+        .attr("width", width)
+        .attr("height", height)
+        .append("g")
+        .attr("transform", "translate(" + -100+ "," + margin.top + ")");
+
+    // Compute the new tree layout.
+    var nodes = tree.nodes(source).reverse(),
+        links = tree.links(nodes);
+
+    // Normalize for fixed-depth.
+    nodes.forEach(function(d) { d.y = d.depth * 100; });
+
+    // Declare the nodesâ€¦
+    var node = svg.selectAll("g.node")
+        .data(nodes, function(d) { return d.id || (d.id = ++i); });
+
+    // Enter the nodes.
+    var nodeEnter = node.enter().append("g")
+        .attr("class", "node")
+        .attr("transform", function(d) {
+            return "translate(" + d.x + "," + d.y + ")"; });
+
+    nodeEnter.append("circle")
+        .attr("r", 4)
+        .style("fill", "#fff");
+
+    nodeEnter.append("text")
+        .attr("y", function(d) {
+            return d.children || d._children ? -20 : 20; })
+        .attr("dy", ".35em")
+        .attr("text-anchor", "middle")
+        .text(function(d) { return d.name; })
+        .style("fill-opacity", 1);
+
+    // Declare the links
+    var link = svg.selectAll("path.link")
+        .data(links, function(d) { return d.target.id; });
+
+    // Enter the links.
+    link.enter().insert("path", "g")
+        .attr("class", "link")
+        .attr("d", diagonal);
+
+}
+
+
