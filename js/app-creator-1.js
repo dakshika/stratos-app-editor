@@ -62,13 +62,13 @@ var endpointOptions = {
 };
 
 var groupOptions = {
-    isTarget:false,
+    isTarget:true,
     endpoint:"Dot",
     paintStyle:{
         fillStyle:"gray"
     },
     dropOptions: exampleDropOptions,
-    maxConnections:1
+    maxConnections:2
 };
 
 
@@ -113,17 +113,92 @@ function addGroup(idname) {
         paintStyle:{strokeStyle:"blue", lineWidth:1 },
         Connector : [ "Bezier", { curviness:63 } ],
         anchors:["BottomCenter", "TopCenter"],
-        endpoint:"Dot"
+        endpoint:"Rectangle"
     });
     DragEl($(Div));
     DragEl($(Div2));
     Repaint();
 }
 
-function addGroupTree(groupId){
+function addJsplumbGroup(groupJSON){
+    console.log(groupJSON);
+    var divRoot = $('<div>').attr('id',groupJSON.name ).text(groupJSON.name).addClass('stepnode').appendTo('#whiteboard');
+    jsPlumb.addEndpoint($(divRoot), {
+        anchor:"BottomCenter"
+    }, bottomConnectorOptions);
+
+    jsPlumb.addEndpoint($(divRoot), {
+        anchor: "TopCenter"
+    }, groupOptions);
+    DragEl($(divRoot));
+
+    for (var prop in groupJSON) {
+        if(prop == 'cartridges'){
+            genJsplumbCartridge(groupJSON[prop], divRoot, groupJSON.name)
+        }
+        if(prop == 'groups'){
+            genJsplumbGroups(groupJSON[prop], divRoot, groupJSON.name)
+        }
+    }
+
+    function genJsplumbCartridge(item, currentParent, parentName){
+        for (var i = 0; i < item.length; i++) {
+            var id = item[i];
+            console.log(currentParent[0])
+            var divCartridge = $('<div>').attr('id',parentName+'.'+item[i] ).text(item[i]).addClass('stepnode').appendTo('#whiteboard');
+            jsPlumb.addEndpoint($(divCartridge), {
+                anchor: "TopCenter"
+            }, endpointOptions);
+
+            //add connection options
+            jsPlumb.connect({
+                source:$(currentParent),
+                target:$(divCartridge),
+                paintStyle:{strokeStyle:"blue", lineWidth:1 },
+                Connector : [ "Bezier", { curviness:63 } ],
+                anchors:["BottomCenter", "TopCenter"],
+                endpoint:"Dot"
+            });
+
+            DragEl($(divCartridge));
+        }
+    }
+
+    function genJsplumbGroups(item, currentParent, parentName) {
+        for (var prop in item) {
+            var divGroup = $('<div>').attr('id',parentName+'.'+item[prop]['name'] ).text(item[prop]['name']).addClass('stepnode').appendTo('#whiteboard');
+            jsPlumb.addEndpoint($(divGroup), {
+                anchor:"BottomCenter"
+            }, bottomConnectorOptions);
+
+            jsPlumb.addEndpoint($(divGroup), {
+                anchor: "TopCenter"
+            }, groupOptions);
+
+            //add connection options
+            jsPlumb.connect({
+                source:$(currentParent),
+                target:$(divGroup),
+                paintStyle:{strokeStyle:"blue", lineWidth:1 },
+                Connector : [ "Bezier", { curviness:63 } ],
+                anchors:["BottomCenter", "TopCenter"],
+                endpoint:"Dot"
+            });
+
+            DragEl($(divGroup));
+
+            if(item[prop].hasOwnProperty('cartridges')) {
+                genJsplumbCartridge(item[prop].cartridges, divGroup, item[prop]['name'] );
+            }
+            if(item[prop].hasOwnProperty('groups')) {
+                genJsplumbGroups(item[prop].groups, divGroup, item[prop]['name'])
+            }
+        }
+    }
+
+
 
 }
-
 //use to activate tab
 function activateTab(tab){
     $('.nav-tabs a[href="#' + tab + '"]').tab('show');
@@ -194,8 +269,9 @@ $(document).ready(function(){
     //handle single click for groups
     $('#group-list').on('click', ".block-group", function(){
         var groupJSON = JSON.parse(decodeURIComponent($(this).attr('data-info')));
-        data = generateGroupTree(groupJSON);
-        generateGroupPreview(data);
+        mydata = generateGroupTree(groupJSON);
+        generateGroupPreview(mydata);
+        addJsplumbGroup(groupJSON);
 
     });
     //handle double click event for groups
@@ -208,18 +284,19 @@ $(document).ready(function(){
     function generateGroupTree(groupJSON){
 
         var rawout = [];
-
+        //create initial node for tree
         var rootnode ={};
         rootnode.name = groupJSON.name;
         rootnode.parent = null;
+        rootnode.type = 'groups';
         rawout.push(rootnode);
 
         for (var prop in groupJSON) {
             if(prop == 'cartridges'){
-                getCartridges(groupJSON[prop],rawout, groupJSON.name)
+                getCartridges(groupJSON[prop],rawout, rootnode.name)
             }
             if(prop == 'groups'){
-                getGroups(groupJSON[prop], rawout, groupJSON.name)
+                getGroups(groupJSON[prop], rawout, rootnode.name)
             }
         }
 
@@ -236,8 +313,12 @@ $(document).ready(function(){
                 var cur_name = item[prop]['name'];
                 var type = 'groups';
                 collector.push({"name": cur_name, "parent": parent, "type": type});
-                getCartridges(item[prop].cartridges, collector , cur_name);
-                getGroups(item[prop].groups, collector, cur_name)
+                if(item[prop].hasOwnProperty('cartridges')) {
+                    getCartridges(item[prop].cartridges, collector, cur_name);
+                }
+                if(item[prop].hasOwnProperty('groups')) {
+                    getGroups(item[prop].groups, collector, cur_name)
+                }
             }
         }
 
