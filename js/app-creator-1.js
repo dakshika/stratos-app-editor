@@ -145,7 +145,8 @@ function addJsplumbGroup(groupJSON){
         for (var i = 0; i < item.length; i++) {
             var id = item[i];
             console.log(currentParent[0])
-            var divCartridge = $('<div>').attr('id',parentName+'.'+item[i] ).text(item[i]).addClass('stepnode').appendTo('#whiteboard');
+            var divCartridge = $('<div>').attr('id', parentName+'.'+item[i] ).text(item[i]).addClass('stepnode')
+                                .appendTo('#whiteboard');
             jsPlumb.addEndpoint($(divCartridge), {
                 anchor: "TopCenter"
             }, endpointOptions);
@@ -166,7 +167,8 @@ function addJsplumbGroup(groupJSON){
 
     function genJsplumbGroups(item, currentParent, parentName) {
         for (var prop in item) {
-            var divGroup = $('<div>').attr('id',parentName+'.'+item[prop]['name'] ).text(item[prop]['name']).addClass('stepnode').appendTo('#whiteboard');
+            var divGroup = $('<div>').attr('id',parentName+'.'+item[prop]['name'] ).text(item[prop]['name'])
+                            .addClass('stepnode').appendTo('#whiteboard');
             jsPlumb.addEndpoint($(divGroup), {
                 anchor:"BottomCenter"
             }, bottomConnectorOptions);
@@ -188,10 +190,10 @@ function addJsplumbGroup(groupJSON){
             DragEl($(divGroup));
 
             if(item[prop].hasOwnProperty('cartridges')) {
-                genJsplumbCartridge(item[prop].cartridges, divGroup, item[prop]['name'] );
+                genJsplumbCartridge(item[prop].cartridges, divGroup, parentName+'.'+item[prop]['name'] );
             }
             if(item[prop].hasOwnProperty('groups')) {
-                genJsplumbGroups(item[prop].groups, divGroup, item[prop]['name'])
+                genJsplumbGroups(item[prop].groups, divGroup, parentName+'.'+item[prop]['name'])
             }
         }
     }
