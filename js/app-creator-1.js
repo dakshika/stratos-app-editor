@@ -42,7 +42,7 @@ var exampleDropOptions = {
     activeClass:"dragActive"
 };
 
-var exampleGreyEndpointOptions = {
+var bottomConnectorOptions = {
     endpoint:"Rectangle",
     paintStyle:{ width:25, height:21, fillStyle:'#666' },
     isSource:true,
@@ -73,21 +73,9 @@ var groupOptions = {
 
 
 jsPlumb.ready(function() {
-
-
     jsPlumb.addEndpoint('applicationId', {
         anchor:"BottomCenter"
-    }, exampleGreyEndpointOptions);
-
-
-    $('.block-cartridge').on('dblclick', function(){
-    //    addCartridge($(this).attr('id'));
-    })
-
-    $('.block-group').on('dblclick', function(){
-       // addGroup($(this).attr('id'));
-    })
-
+    }, bottomConnectorOptions);
 });
 
 function addCartridge(idname) {
@@ -111,7 +99,7 @@ function addGroup(idname) {
     }, endpointOptions);
     jsPlumb.addEndpoint($(Div), {
         anchor:"BottomCenter"
-    }, exampleGreyEndpointOptions);
+    }, bottomConnectorOptions);
 
     $(Div2).addClass('stepnode');
     jsPlumb.addEndpoint($(Div2), {
@@ -130,6 +118,10 @@ function addGroup(idname) {
     DragEl($(Div));
     DragEl($(Div2));
     Repaint();
+}
+
+function addGroupTree(groupId){
+
 }
 
 //use to activate tab
@@ -258,9 +250,9 @@ $(document).ready(function(){
 
 // ************** Generate the tree diagram	 *****************
 function generateGroupPreview(data) {
+    //clean current graph and text
     $(".description-section").html('');
-    //clean current graph
-    d3.select("svg").remove();
+
     //mapping data
     var dataMap = data.reduce(function(map, node) {
         map[node.name] = node;
@@ -300,7 +292,7 @@ function generateGroupPreview(data) {
         .attr("width", width)
         .attr("height", height)
         .append("g")
-        .attr("transform", "translate(" + -100+ "," + margin.top + ")");
+        .attr("transform", "translate(" + -90+ "," + margin.top + ")");
 
     // Compute the new tree layout.
     var nodes = tree.nodes(source).reverse(),
