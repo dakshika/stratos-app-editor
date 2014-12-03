@@ -100,6 +100,54 @@
                     "group1,tomcat"
                 ]
             }
+        },
+        {
+            "name":"level5",
+            "groups":[
+                {
+                    "name":"group1",
+                    "groups":[
+                        {
+                            "name":"group4",
+                            "cartridges":[
+                                "tomcat"
+                            ],
+                            "dependencies":{
+                                "terminationBehaviour":"terminate-none"
+                            },
+                            "groups":[
+                                {
+                                    "name":"group5",
+                                    "cartridges":[
+                                        "tomcat"
+                                    ],
+                                    "dependencies":{
+                                        "terminationBehaviour":"terminate-none"
+                                    }
+                                }
+                            ]
+                        }
+                    ],
+                    "cartridges":[
+                        "tomcat1"
+                    ],
+                    "dependencies":{
+                        "terminationBehaviour":"terminate-none"
+                    }
+                }
+            ],
+            "cartridges":[
+                "tomcat"
+            ],
+            "dependencies":{
+                "startupOrders":[
+                    "group1,tomcat"
+                ],
+                "terminationBehaviour":"terminate-dependents",
+                "scalingDependents":[
+                    "group1,tomcat"
+                ]
+            }
         }
     ]
 }
