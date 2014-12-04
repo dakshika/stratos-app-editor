@@ -68,16 +68,37 @@ var groupOptions = {
         fillStyle:"gray"
     },
     dropOptions: exampleDropOptions,
-    maxConnections:2
+    maxConnections:1
 };
 
+var generatedCartridgeEndpointOptions = {
+    isTarget:false,
+    endpoint:"Dot",
+    paintStyle:{
+        fillStyle:"gray"
+    },
+    dropOptions: exampleDropOptions,
+    maxConnections:1
+};
 
+var generatedGroupOptions = {
+    isTarget:false,
+    endpoint:"Dot",
+    paintStyle:{
+        fillStyle:"gray"
+    },
+    dropOptions: exampleDropOptions,
+    maxConnections:1
+};
+
+//create application level block
 jsPlumb.ready(function() {
     jsPlumb.addEndpoint('applicationId', {
         anchor:"BottomCenter"
     }, bottomConnectorOptions);
 });
 
+//add cartridge to editor
 function addCartridge(idname) {
     var Div = $('<div>').text(idname).appendTo('#whiteboard');
     $(Div).addClass('stepnode');
@@ -89,39 +110,9 @@ function addCartridge(idname) {
     Repaint();
 }
 
-function addGroup(idname) {
-    var Div = $('<div>').text(idname).css({left:"300px", top:"200px"}).appendTo('#whiteboard');
-    var Div2 = $('<div>').text(idname).appendTo('#whiteboard');
-
-    $(Div).addClass('stepnode');
-    jsPlumb.addEndpoint($(Div), {
-        anchor: "TopCenter"
-    }, endpointOptions);
-    jsPlumb.addEndpoint($(Div), {
-        anchor:"BottomCenter"
-    }, bottomConnectorOptions);
-
-    $(Div2).addClass('stepnode');
-    jsPlumb.addEndpoint($(Div2), {
-        anchor: "TopCenter"
-    }, groupOptions);
-    // jsPlumb.addEndpoint($(Div), sourceEndpoint);
-
-    jsPlumb.connect({
-        source:$(Div),
-        target:$(Div2),
-        paintStyle:{strokeStyle:"blue", lineWidth:1 },
-        Connector : [ "Bezier", { curviness:63 } ],
-        anchors:["BottomCenter", "TopCenter"],
-        endpoint:"Rectangle"
-    });
-    DragEl($(Div));
-    DragEl($(Div2));
-    Repaint();
-}
-
+//add group to editor
 function addJsplumbGroup(groupJSON){
-    console.log(groupJSON);
+
     var divRoot = $('<div>').attr('id',groupJSON.name ).text(groupJSON.name).addClass('stepnode').appendTo('#whiteboard');
     jsPlumb.addEndpoint($(divRoot), {
         anchor:"BottomCenter"
@@ -144,12 +135,11 @@ function addJsplumbGroup(groupJSON){
     function genJsplumbCartridge(item, currentParent, parentName){
         for (var i = 0; i < item.length; i++) {
             var id = item[i];
-            console.log(currentParent[0])
             var divCartridge = $('<div>').attr('id', parentName+'.'+item[i] ).text(item[i]).addClass('stepnode')
                                 .appendTo('#whiteboard');
             jsPlumb.addEndpoint($(divCartridge), {
                 anchor: "TopCenter"
-            }, endpointOptions);
+            }, generatedCartridgeEndpointOptions);
 
             //add connection options
             jsPlumb.connect({
@@ -175,7 +165,7 @@ function addJsplumbGroup(groupJSON){
 
             jsPlumb.addEndpoint($(divGroup), {
                 anchor: "TopCenter"
-            }, groupOptions);
+            }, generatedGroupOptions);
 
             //add connection options
             jsPlumb.connect({
@@ -273,12 +263,13 @@ $(document).ready(function(){
         var groupJSON = JSON.parse(decodeURIComponent($(this).attr('data-info')));
         mydata = generateGroupTree(groupJSON);
         generateGroupPreview(mydata);
-        addJsplumbGroup(groupJSON);
+
 
     });
     //handle double click event for groups
     $('#group-list').on('dblclick', ".block-group", function(){
-        addGroup($(this).attr('id'));
+        var groupJSON = JSON.parse(decodeURIComponent($(this).attr('data-info')));
+        addJsplumbGroup(groupJSON);
     });
 
 
