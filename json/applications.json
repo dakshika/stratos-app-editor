@@ -64,6 +64,12 @@
                     "repoUsername":"user"
                 }
             }
-        ]
+        ],
+        "dependencies":{
+            "startupOrders":[
+                "group1,tomcat"
+            ],
+            "terminationBehaviour":"terminate-dependents"
+        }
     }
 }
