@@ -97,6 +97,7 @@ top: 33px;
 }
 .dragActive {
     border: 2px dotted orange;
+
 }
 
 .node-disable{

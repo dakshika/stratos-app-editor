@@ -1,21 +1,8 @@
-// init draggable and resizable on elements
-$(document).ready(function(){
-    DragEl(".stepnode");
-    //ResizeEl(".stepnode");
-    Repaint();
-});
-
-//// functions ////
-
 // repaint
 function Repaint(){
     $("#whiteboard").resize(function(){
         jsPlumb.repaintEverything();
     });
-}
-// resize
-function ResizeEl(el){
-    $(el).resizable();
 }
 // drag
 function DragEl(el){
@@ -38,7 +25,7 @@ jsPlumb.importDefaults({
 });
 
 
-var exampleDropOptions = {
+var nodeDropOptions = {
     activeClass:"dragActive"
 };
 
@@ -57,7 +44,7 @@ var endpointOptions = {
     paintStyle:{
         fillStyle:"gray"
     },
-    dropOptions: exampleDropOptions,
+    dropOptions: nodeDropOptions,
     maxConnections:1
 };
 
@@ -67,7 +54,7 @@ var groupOptions = {
     paintStyle:{
         fillStyle:"gray"
     },
-    dropOptions: exampleDropOptions,
+    dropOptions: nodeDropOptions,
     maxConnections:1
 };
 
@@ -77,7 +64,7 @@ var generatedCartridgeEndpointOptions = {
     paintStyle:{
         fillStyle:"gray"
     },
-    dropOptions: exampleDropOptions,
+    dropOptions: '',
     maxConnections:1
 };
 
@@ -87,12 +74,12 @@ var generatedGroupOptions = {
     paintStyle:{
         fillStyle:"gray"
     },
-    dropOptions: exampleDropOptions,
+    dropOptions: nodeDropOptions,
     maxConnections:1
 };
 
-//create application level block
 jsPlumb.ready(function() {
+    //create application level block
     jsPlumb.addEndpoint('applicationId', {
         anchor:"BottomCenter"
     }, bottomConnectorOptions);
@@ -113,7 +100,11 @@ function addCartridge(idname) {
 //add group to editor
 function addJsplumbGroup(groupJSON){
 
-    var divRoot = $('<div>').attr('id',groupJSON.name ).text(groupJSON.name).addClass('stepnode').appendTo('#whiteboard');
+    var divRoot = $('<div>').attr('id',groupJSON.name )
+                    .text(groupJSON.name)
+                    .addClass('input-false')
+                    .addClass('stepnode')
+                    .appendTo('#whiteboard');
     jsPlumb.addEndpoint($(divRoot), {
         anchor:"BottomCenter"
     }, bottomConnectorOptions);
@@ -135,8 +126,12 @@ function addJsplumbGroup(groupJSON){
     function genJsplumbCartridge(item, currentParent, parentName){
         for (var i = 0; i < item.length; i++) {
             var id = item[i];
-            var divCartridge = $('<div>').attr('id', parentName+'.'+item[i] ).text(item[i]).addClass('stepnode')
+            var divCartridge = $('<div>').attr('id', parentName+'.'+item[i] )
+                                .text(item[i])
+                                .addClass('input-false')
+                                .addClass('stepnode')
                                 .appendTo('#whiteboard');
+
             jsPlumb.addEndpoint($(divCartridge), {
                 anchor: "TopCenter"
             }, generatedCartridgeEndpointOptions);
@@ -158,7 +153,9 @@ function addJsplumbGroup(groupJSON){
     function genJsplumbGroups(item, currentParent, parentName) {
         for (var prop in item) {
             var divGroup = $('<div>').attr('id',parentName+'.'+item[prop]['name'] ).text(item[prop]['name'])
-                            .addClass('stepnode').appendTo('#whiteboard');
+                            .addClass('stepnode')
+                            .addClass('input-false')
+                            .appendTo('#whiteboard');
             jsPlumb.addEndpoint($(divGroup), {
                 anchor:"BottomCenter"
             }, bottomConnectorOptions);
@@ -195,132 +192,51 @@ function addJsplumbGroup(groupJSON){
 function activateTab(tab){
     $('.nav-tabs a[href="#' + tab + '"]').tab('show');
 };
+//generate treefor Groups
+function generateGroupTree(groupJSON){
 
-// Document ready events
-$(document).ready(function(){
+    var rawout = [];
+    //create initial node for tree
+    var rootnode ={};
+    rootnode.name = groupJSON.name;
+    rootnode.parent = null;
+    rootnode.type = 'groups';
+    rawout.push(rootnode);
 
-    $('#whiteboard').on('dblclick', '.stepnode', function(){
-        //get tab activated
-        activateTab('components');
-        console.log($(this))
-    });
-
-    //get create cartridge list
-    var cartridgeUrl = "json/cartridges.json";
-
-    $.getJSON(cartridgeUrl, function(data) {
-        generateCartridges(data.cartridge);
-    })
-
-    //create cartridge list
-    var cartridgeListHtml='';
-    function generateCartridges(data){
-        for(var cartridge in data){
-            var cartridgeData = data[cartridge];
-            cartridgeListHtml += '<div class="block-cartridge" ' +
-                'data-info="'+cartridgeData.description+ '"'+
-                'data-toggle="tooltip" data-placement="bottom" title="Single Click to view details. Double click to add"'+
-                'id="'+cartridgeData.displayName+'">'
-                + cartridgeData.displayName+
-                '</div>'
+    for (var prop in groupJSON) {
+        if(prop == 'cartridges'){
+            getCartridges(groupJSON[prop],rawout, rootnode.name)
         }
-        //append cartridge into html content
-       $('#cartridge-list').append(cartridgeListHtml);
+        if(prop == 'groups'){
+            getGroups(groupJSON[prop], rawout, rootnode.name)
+        }
     }
 
-    //handle single click for cartridge
-    $('#cartridge-list').on('click', ".block-cartridge", function(){
-        $('.description-section').html($(this).attr('data-info'));
-    });
-    //handle double click for cartridge
-    $('#cartridge-list').on('dblclick', ".block-cartridge", function(){
-        addCartridge($(this).attr('id'));
-    });
-
-    //get group JSON
-    var groupUrl = "json/groups.json";
-
-    $.getJSON(groupUrl, function(data) {
-        generateGroups(data.serviceGroup);
-    });
-
-    //create group list
-    var groupListHtml='';
-    function generateGroups(data){
-        for(var group in data){
-            var groupData = data[group];
-            groupListHtml += '<div class="block-group" ' +
-                ' data-info="'+encodeURIComponent(JSON.stringify(groupData))+'"'+
-                'id="'+groupData.name+'">'
-                + groupData.name+
-                '</div>'
+    function getCartridges(item, collector, parent){
+        for (var i = 0; i < item.length; i++) {
+            var type = 'cartridges';
+            var cur_name = item[i];
+            collector.push({"name": cur_name, "parent": parent, "type": type});
         }
-        //append cartridge into html content
-        $('#group-list').append(groupListHtml);
     }
 
-    //handle single click for groups
-    $('#group-list').on('click', ".block-group", function(){
-        var groupJSON = JSON.parse(decodeURIComponent($(this).attr('data-info')));
-        mydata = generateGroupTree(groupJSON);
-        generateGroupPreview(mydata);
-
-
-    });
-    //handle double click event for groups
-    $('#group-list').on('dblclick', ".block-group", function(){
-        var groupJSON = JSON.parse(decodeURIComponent($(this).attr('data-info')));
-        addJsplumbGroup(groupJSON);
-    });
-
-    //generate treefor Groups
-    function generateGroupTree(groupJSON){
-
-        var rawout = [];
-        //create initial node for tree
-        var rootnode ={};
-        rootnode.name = groupJSON.name;
-        rootnode.parent = null;
-        rootnode.type = 'groups';
-        rawout.push(rootnode);
-
-        for (var prop in groupJSON) {
-            if(prop == 'cartridges'){
-                getCartridges(groupJSON[prop],rawout, rootnode.name)
+    function getGroups(item, collector, parent){
+        for (var prop in item) {
+            var cur_name = item[prop]['name'];
+            var type = 'groups';
+            collector.push({"name": cur_name, "parent": parent, "type": type});
+            if(item[prop].hasOwnProperty('cartridges')) {
+                getCartridges(item[prop].cartridges, collector, cur_name);
             }
-            if(prop == 'groups'){
-                getGroups(groupJSON[prop], rawout, rootnode.name)
+            if(item[prop].hasOwnProperty('groups')) {
+                getGroups(item[prop].groups, collector, cur_name)
             }
         }
-
-        function getCartridges(item, collector, parent){
-            for (var i = 0; i < item.length; i++) {
-                var type = 'cartridges';
-                var cur_name = item[i];
-                collector.push({"name": cur_name, "parent": parent, "type": type});
-            }
-        }
-
-        function getGroups(item, collector, parent){
-            for (var prop in item) {
-                var cur_name = item[prop]['name'];
-                var type = 'groups';
-                collector.push({"name": cur_name, "parent": parent, "type": type});
-                if(item[prop].hasOwnProperty('cartridges')) {
-                    getCartridges(item[prop].cartridges, collector, cur_name);
-                }
-                if(item[prop].hasOwnProperty('groups')) {
-                    getGroups(item[prop].groups, collector, cur_name)
-                }
-            }
-        }
-
-        return rawout;
-
     }
 
-});
+    return rawout;
 
+}
 
 // ************** Generate the tree diagram	 *****************
 function generateGroupPreview(data) {
@@ -408,26 +324,25 @@ function generateGroupPreview(data) {
 
 }
 
-
 // ************* Add context menu for nodes ******************
 //remove nodes from workarea
 function deleteNode(endPoint){
-    console.log(endPoint)
-    //jsPlumb.deleteEndpoint(endPoint);
-    var that=endPoint;      //get all of your DIV tags having endpoints
-    for (var i=0;i<that.length;i++) {
-        var endpoints = jsPlumb.getEndpoints($(that[i])); //get all endpoints of that DIV
-        for (var m=0;m<endpoints.length;m++) {
-           // if(endpoints[m].anchor.type=="TopCenter") //Endpoint on right side
+    if(endPoint.attr('id') != 'applicationId'){
+        var that=endPoint;      //get all of your DIV tags having endpoints
+        for (var i=0;i<that.length;i++) {
+            var endpoints = jsPlumb.getEndpoints($(that[i])); //get all endpoints of that DIV
+            for (var m=0;m<endpoints.length;m++) {
+                // if(endpoints[m].anchor.type=="TopCenter") //Endpoint on right side
                 jsPlumb.deleteEndpoint(endpoints[m]);  //remove endpoint
+            }
         }
+        jsPlumb.detachAllConnections(endPoint);
+        endPoint.remove();
     }
-    jsPlumb.detachAllConnections(endPoint);
-    endPoint.remove();
+
 }
 
-jsPlumb.deleteEndpoint('')
-
+//genrate context menu for nodes
 $(function(){
     $.contextMenu({
         selector: '.stepnode',
@@ -448,3 +363,87 @@ $(function(){
     });
 
 });
+
+// Document ready events
+$(document).ready(function(){
+
+    DragEl(".stepnode");
+    Repaint();
+
+    $('#whiteboard').on('dblclick', '.stepnode', function(){
+        //get tab activated
+        activateTab('components');
+        console.log($(this))
+    });
+
+    //get create cartridge list
+    var cartridgeUrl = "json/cartridges.json";
+
+    $.getJSON(cartridgeUrl, function(data) {
+        generateCartridges(data.cartridge);
+    })
+
+    //create cartridge list
+    var cartridgeListHtml='';
+    function generateCartridges(data){
+        for(var cartridge in data){
+            var cartridgeData = data[cartridge];
+            cartridgeListHtml += '<div class="block-cartridge" ' +
+                'data-info="'+cartridgeData.description+ '"'+
+                'data-toggle="tooltip" data-placement="bottom" title="Single Click to view details. Double click to add"'+
+                'id="'+cartridgeData.displayName+'">'
+                + cartridgeData.displayName+
+                '</div>'
+        }
+        //append cartridge into html content
+       $('#cartridge-list').append(cartridgeListHtml);
+    }
+
+    //handle single click for cartridge
+    $('#cartridge-list').on('click', ".block-cartridge", function(){
+        $('.description-section').html($(this).attr('data-info'));
+    });
+    //handle double click for cartridge
+    $('#cartridge-list').on('dblclick', ".block-cartridge", function(){
+        addCartridge($(this).attr('id'));
+    });
+
+    //get group JSON
+    var groupUrl = "json/groups.json";
+
+    $.getJSON(groupUrl, function(data) {
+        generateGroups(data.serviceGroup);
+    });
+
+    //create group list
+    var groupListHtml='';
+    function generateGroups(data){
+        for(var group in data){
+            var groupData = data[group];
+            groupListHtml += '<div class="block-group" ' +
+                ' data-info="'+encodeURIComponent(JSON.stringify(groupData))+'"'+
+                'id="'+groupData.name+'">'
+                + groupData.name+
+                '</div>'
+        }
+        //append cartridge into html content
+        $('#group-list').append(groupListHtml);
+    }
+
+    //handle single click for groups
+    $('#group-list').on('click', ".block-group", function(){
+        var groupJSON = JSON.parse(decodeURIComponent($(this).attr('data-info')));
+        mydata = generateGroupTree(groupJSON);
+        generateGroupPreview(mydata);
+
+
+    });
+    //handle double click event for groups
+    $('#group-list').on('dblclick', ".block-group", function(){
+        var groupJSON = JSON.parse(decodeURIComponent($(this).attr('data-info')));
+        addJsplumbGroup(groupJSON);
+    });
+
+});
+
+
