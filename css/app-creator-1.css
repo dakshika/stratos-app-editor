@@ -13,16 +13,18 @@ top: 33px;
 }
 
 .stepnode {
-    border:1px solid black;
-    position:absolute !important;
-    width:5em;
-    height:5em;
+    border: 1px solid black;
+    position: absolute !important;
+    width: 5em;
+    height: 5em;
     padding: 0.5em;
-    z-index:1;
-    border-radius:0.5em;
+    z-index: 1;
+    border-radius: 0.5em;
     box-shadow: 2px 2px 19px #aaa;
     background: white;
     word-wrap: break-word;
+    padding-top: 24px;
+    text-align: center;
 }
 
 .block-cartridge {
@@ -114,4 +116,10 @@ top: 33px;
     fill: none;
     stroke: #ccc;
     stroke-width: 2px;
+}
+
+.input-false{
+    background-color: #CCC;
+    border-color: #ddd;
+    border-width: 1px;
 }

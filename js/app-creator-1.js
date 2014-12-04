@@ -100,7 +100,7 @@ jsPlumb.ready(function() {
 
 //add cartridge to editor
 function addCartridge(idname) {
-    var Div = $('<div>').text(idname).appendTo('#whiteboard');
+    var Div = $('<div>').attr('id',idname ).text(idname).addClass('input-false').appendTo('#whiteboard');
     $(Div).addClass('stepnode');
     jsPlumb.addEndpoint($(Div), {
         anchor: "TopCenter"
@@ -201,7 +201,8 @@ $(document).ready(function(){
 
     $('#whiteboard').on('dblclick', '.stepnode', function(){
         //get tab activated
-        activateTab('components')
+        activateTab('components');
+        console.log($(this))
     });
 
     //get create cartridge list
@@ -271,7 +272,6 @@ $(document).ready(function(){
         var groupJSON = JSON.parse(decodeURIComponent($(this).attr('data-info')));
         addJsplumbGroup(groupJSON);
     });
-
 
     //generate treefor Groups
     function generateGroupTree(groupJSON){
@@ -409,3 +409,42 @@ function generateGroupPreview(data) {
 }
 
 
+// ************* Add context menu for nodes ******************
+//remove nodes from workarea
+function deleteNode(endPoint){
+    console.log(endPoint)
+    //jsPlumb.deleteEndpoint(endPoint);
+    var that=endPoint;      //get all of your DIV tags having endpoints
+    for (var i=0;i<that.length;i++) {
+        var endpoints = jsPlumb.getEndpoints($(that[i])); //get all endpoints of that DIV
+        for (var m=0;m<endpoints.length;m++) {
+           // if(endpoints[m].anchor.type=="TopCenter") //Endpoint on right side
+                jsPlumb.deleteEndpoint(endpoints[m]);  //remove endpoint
+        }
+    }
+    jsPlumb.detachAllConnections(endPoint);
+    endPoint.remove();
+}
+
+jsPlumb.deleteEndpoint('')
+
+$(function(){
+    $.contextMenu({
+        selector: '.stepnode',
+        callback: function(key, options) {
+            var m = "clicked: " + key + $(this);
+            if(key == 'delete'){
+                deleteNode($(this));
+            }
+
+            window.console && console.log($(this));
+        },
+        items: {
+            "edit": {name: "Edit", icon: "edit"},
+            "delete": {name: "Delete", icon: "delete"},
+            "sep1": "---------",
+            "quit": {name: "Quit", icon: "quit"}
+        }
+    });
+
+});
