@@ -85,9 +85,14 @@ jsPlumb.ready(function() {
     }, bottomConnectorOptions);
 });
 
+var cartridgeCounter=0;
 //add cartridge to editor
-function addCartridge(idname) {
-    var Div = $('<div>').attr('id',idname ).text(idname).addClass('input-false').appendTo('#whiteboard');
+function addJsplumbCartridge(idname, cartridgeCounter) {
+
+    var Div = $('<div>').attr({'id':cartridgeCounter+'-'+idname, 'data-type':'cartridge' } )
+                .text(idname)
+                .addClass('input-false')
+                .appendTo('#whiteboard');
     $(Div).addClass('stepnode');
     jsPlumb.addEndpoint($(Div), {
         anchor: "TopCenter"
@@ -98,9 +103,9 @@ function addCartridge(idname) {
 }
 
 //add group to editor
-function addJsplumbGroup(groupJSON){
+function addJsplumbGroup(groupJSON, cartridgeCounter){
 
-    var divRoot = $('<div>').attr('id',groupJSON.name )
+    var divRoot = $('<div>').attr({'id':cartridgeCounter+'-'+groupJSON.name,'data-type':'group'})
                     .text(groupJSON.name)
                     .addClass('input-false')
                     .addClass('stepnode')
@@ -126,7 +131,7 @@ function addJsplumbGroup(groupJSON){
     function genJsplumbCartridge(item, currentParent, parentName){
         for (var i = 0; i < item.length; i++) {
             var id = item[i];
-            var divCartridge = $('<div>').attr('id', parentName+'.'+item[i] )
+            var divCartridge = $('<div>').attr({'id':cartridgeCounter+'-'+parentName+'-'+item[i],'data-type':'group-cartridge'} )
                                 .text(item[i])
                                 .addClass('input-false')
                                 .addClass('stepnode')
@@ -152,7 +157,8 @@ function addJsplumbGroup(groupJSON){
 
     function genJsplumbGroups(item, currentParent, parentName) {
         for (var prop in item) {
-            var divGroup = $('<div>').attr('id',parentName+'.'+item[prop]['name'] ).text(item[prop]['name'])
+            var divGroup = $('<div>').attr({'id':cartridgeCounter+'-'+parentName+'-'+item[prop]['name'],'data-type':'group' })
+                            .text(item[prop]['name'])
                             .addClass('stepnode')
                             .addClass('input-false')
                             .appendTo('#whiteboard');
@@ -345,7 +351,7 @@ function deleteNode(endPoint){
 //genrate context menu for nodes
 $(function(){
     $.contextMenu({
-        selector: '.stepnode',
+        selector: '.stepnodeTODO',
         callback: function(key, options) {
             var m = "clicked: " + key + $(this);
             if(key == 'delete'){
@@ -364,6 +370,51 @@ $(function(){
 
 });
 
+var applicationJson = {};
+//Definition JSON builder
+function applicationJsonBuilder(collector, input){
+
+    //get genral data
+    $('input.level-root').each(function(){
+        var inputId = $(this).attr('id');
+        collector[inputId] = $(this).val();
+    });
+    collector['components']={};
+    collector['components']['dependencies']={};
+    collector['components']['groups']={};
+    collector['components']['cartridges']={};
+    collector['components']['dependencies']['startupOrders']=[];
+    collector['components']['dependencies']['scalingDependents']=[];
+    //TODO need to convert string into array
+    collector['components']['dependencies']['startupOrders'] = [$('input#startupOrders').val()];
+    collector['components']['dependencies']['scalingDependents'] = [$('input#scalingDependents').val()];
+    collector['components']['dependencies']['terminationBehaviour']=$('select#terminationBehaviour').val();
+
+
+    console.log(JSON.stringify(collector));
+}
+
+var cartridgeBlockTemplate = {
+    "type":"name",
+    "cartridgeMin":1,
+    "cartridgeMax":2,
+    "subscribableInfo":{
+        "alias":"alias2",
+        "autoscalingPolicy":"autoscale_policy_1",
+        "privateRepo":"true",
+        "repoPassword":"password",
+        "repoURL":"http://xxx:10080/git/default.git",
+        "repoUsername":"user"
+    }
+};
+
+var groupBlockTemplate = {
+    "name":"name",
+    "alias":"alias",
+    "groupMinInstances":1,
+    "groupMaxInstances":2,
+    "isGroupScalingEnabled":"false"
+};
 // Document ready events
 $(document).ready(function(){
 
@@ -373,8 +424,75 @@ $(document).ready(function(){
     $('#whiteboard').on('dblclick', '.stepnode', function(){
         //get tab activated
         activateTab('components');
-        console.log($(this))
+        var blockId = $(this).attr('id');
+        var blockType = $(this).attr('data-type');
+
+        switch (blockType){
+            case 'cartridge':
+                $('#component-data').html(generateHtmlBlock(cartridgeBlockTemplate, blockId));
+                break;
+
+            case 'group':
+                $('#component-data').html(generateHtmlBlock(groupBlockTemplate,blockId ));
+
+                break;
+
+            case 'group-cartridge':
+                $('#component-data').html(generateHtmlBlock(cartridgeBlockTemplate, blockId));
+                break;
+        }
+
     });
+
+    function generateHtmlBlock(JSONTemplate, block){
+
+        var html='';
+        var JsonObject = JSONTemplate;
+
+        html += '<input type="hidden" id="block" data-selection="'+block+'">'
+        for(item in JsonObject){
+
+            if(item == 'subscribableInfo'){
+                html += '<div class="panel panel-default">'+
+                        '<div class="panel-heading">Subscribable Info</div>'+
+                        '<div class="panel-body">';
+
+                for(prop in JsonObject[item]){
+                    html += '<div class="form-group">'+
+                        '<label class="control-label" for="alias">'+prop+':</label>'+
+                        '<input type="text" class="form-control level-components" placeholder="'+JsonObject[item][prop]+
+                        '" id="'+prop+'">'+
+                        '</div>';
+                }
+
+                html += '</div></div>';
+            }else{
+                html += '<div class="form-group">'+
+                    '<label class="control-label" for="alias">'+item+':</label>'+
+                    '<input type="text" class="form-control level-components" placeholder="'+JsonObject[item]+
+                    '" id="'+item+'">'+
+                    '</div>';
+            }
+
+        }
+
+        return html;
+    }
+
+    //get component JSON data
+    $('#component-info-update').on('click', function(){
+        console.log('click cbutton')
+        $('#component-data input').each(function(){
+            var inputId = $(this).attr('id');
+
+            if(inputId == 'block'){
+                console.log( $('#whiteboard #'+$(this).attr('data-selection')))
+                $('#whiteboard #'+$(this).attr('data-selection')).removeClass('input-false');
+            }
+           /// $('').removeClass('input-false');
+        });
+    });
+
 
     //get create cartridge list
     var cartridgeUrl = "json/cartridges.json";
@@ -391,7 +509,7 @@ $(document).ready(function(){
             cartridgeListHtml += '<div class="block-cartridge" ' +
                 'data-info="'+cartridgeData.description+ '"'+
                 'data-toggle="tooltip" data-placement="bottom" title="Single Click to view details. Double click to add"'+
-                'id="'+cartridgeData.displayName+'">'
+                'id="'+cartridgeData.cartridgeType+'">'
                 + cartridgeData.displayName+
                 '</div>'
         }
@@ -405,7 +523,9 @@ $(document).ready(function(){
     });
     //handle double click for cartridge
     $('#cartridge-list').on('dblclick', ".block-cartridge", function(){
-        addCartridge($(this).attr('id'));
+        addJsplumbCartridge($(this).attr('id'),cartridgeCounter);
+        //increase global count for instances
+        cartridgeCounter++;
     });
 
     //get group JSON
@@ -441,7 +561,14 @@ $(document).ready(function(){
     //handle double click event for groups
     $('#group-list').on('dblclick', ".block-group", function(){
         var groupJSON = JSON.parse(decodeURIComponent($(this).attr('data-info')));
-        addJsplumbGroup(groupJSON);
+        addJsplumbGroup(groupJSON,cartridgeCounter);
+        //increase global count for instances
+        cartridgeCounter++;
+    });
+
+    //get update button status on general tab
+    $("#general-info-update").on('click', function(){
+        applicationJsonBuilder(applicationJson);
     });
 
 });
