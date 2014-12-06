@@ -89,6 +89,8 @@
                     <ul class="nav nav-tabs" role="tablist">
                         <li role="presentation" class="active"><a href="#general" aria-controls="general" role="tab"
                                                                   data-toggle="tab">General Details</a></li>
+                        <li role="presentation"><a href="#dependencies" aria-controls="components"
+                                                   role="tab" data-toggle="tab">Dependencies</a></li>
                         <li role="presentation"><a href="#components" aria-controls="components"
                                                    role="tab" data-toggle="tab">Components</a></li>
                         <li role="presentation"><a href="#messages" aria-controls="messages"
@@ -101,15 +103,40 @@
                         <div role="tabpanel" class="tab-pane active" id="general">
                             <div class="form-group">
                                 <label class="control-label" for="applicationId">Application Id:</label>
-                                <input type="text" class="form-control" placeholder="" id="applicationId">
+                                <input type="text" class="form-control level-root" placeholder="" id="applicationId">
                             </div>
                             <div class="form-group">
                                 <label class="control-label" for="alias">Alias:</label>
-                                <input type="text" class="form-control" placeholder="" id="alias">
+                                <input type="text" class="form-control level-root" placeholder="" id="alias">
                             </div>
-                            <button type="button" class="btn btn-primary">Update</button>
+
+                            <button type="button" class="btn btn-primary" id="general-info-update">Update</button>
                         </div>
-                        <div role="tabpanel" class="tab-pane" id="components">...</div>
+                        <div role="tabpanel" class="tab-pane" id="dependencies">
+                            <div class="form-group">
+                                <label class="control-label" for="alias">Startup Orders:</label>
+                                <input type="text" class="form-control level-components" placeholder="" id="startupOrders">
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label" for="alias">Scaling Dependents:</label>
+                                <input type="text" class="form-control level-components" placeholder="" id="scalingDependents">
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label" for="alias">Termination Behaviour:</label>
+                                <select class="form-control level-components" id="terminationBehaviour">
+                                    <option value="terminate-none">terminate-none</option>
+                                    <option value="terminate-dependents">terminate-dependents</option>
+                                    <option value="terminate-all">terminate-all</option>
+                                </select>
+                            </div>
+                            <button type="button" class="btn btn-primary" id="dependencies-info-update">Update</button>
+                        </div>
+                        <div role="tabpanel" class="tab-pane components" id="components">
+                           <button type="button" class="btn btn-primary" id="component-info-update">Update</button>
+                            <div id="component-data">
+
+                            </div>
+                        </div>
                         <div role="tabpanel" class="tab-pane" id="messages">...</div>
                     </div>
 
