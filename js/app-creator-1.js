@@ -89,7 +89,7 @@ var cartridgeCounter=0;
 //add cartridge to editor
 function addJsplumbCartridge(idname, cartridgeCounter) {
 
-    var Div = $('<div>').attr({'id':cartridgeCounter+'-'+idname, 'data-type':'cartridge' } )
+    var Div = $('<div>').attr({'id':cartridgeCounter+'-'+idname, 'data-type':'cartridge', 'data-ctype':idname } )
                 .text(idname)
                 .addClass('input-false')
                 .appendTo('#whiteboard');
@@ -105,7 +105,7 @@ function addJsplumbCartridge(idname, cartridgeCounter) {
 //add group to editor
 function addJsplumbGroup(groupJSON, cartridgeCounter){
 
-    var divRoot = $('<div>').attr({'id':cartridgeCounter+'-'+groupJSON.name,'data-type':'group'})
+    var divRoot = $('<div>').attr({'id':cartridgeCounter+'-'+groupJSON.name,'data-type':'group','data-ctype':groupJSON.name})
                     .text(groupJSON.name)
                     .addClass('input-false')
                     .addClass('stepnode')
@@ -131,7 +131,7 @@ function addJsplumbGroup(groupJSON, cartridgeCounter){
     function genJsplumbCartridge(item, currentParent, parentName){
         for (var i = 0; i < item.length; i++) {
             var id = item[i];
-            var divCartridge = $('<div>').attr({'id':cartridgeCounter+'-'+parentName+'-'+item[i],'data-type':'group-cartridge'} )
+            var divCartridge = $('<div>').attr({'id':cartridgeCounter+'-'+parentName+'-'+item[i],'data-type':'group-cartridge','data-ctype':item[i]} )
                                 .text(item[i])
                                 .addClass('input-false')
                                 .addClass('stepnode')
@@ -157,7 +157,7 @@ function addJsplumbGroup(groupJSON, cartridgeCounter){
 
     function genJsplumbGroups(item, currentParent, parentName) {
         for (var prop in item) {
-            var divGroup = $('<div>').attr({'id':cartridgeCounter+'-'+parentName+'-'+item[prop]['name'],'data-type':'group' })
+            var divGroup = $('<div>').attr({'id':cartridgeCounter+'-'+parentName+'-'+item[prop]['name'],'data-type':'group','data-ctype':item[prop]['name'] })
                             .text(item[prop]['name'])
                             .addClass('stepnode')
                             .addClass('input-false')
@@ -394,27 +394,137 @@ function applicationJsonBuilder(collector, input){
     console.log(JSON.stringify(collector));
 }
 
+//setting up schema and defaults
 var cartridgeBlockTemplate = {
-    "type":"name",
-    "cartridgeMin":1,
-    "cartridgeMax":2,
-    "subscribableInfo":{
-        "alias":"alias2",
-        "autoscalingPolicy":"autoscale_policy_1",
-        "privateRepo":"true",
-        "repoPassword":"password",
-        "repoURL":"http://xxx:10080/git/default.git",
-        "repoUsername":"user"
+        "type":"object",
+        "$schema": "http://json-schema.org/draft-03/schema",
+        "id": "root",
+        "format":"grid",
+        "properties":{
+            "type": {
+                "type":"string",
+                "id": "root/type",
+                "default": "name",
+                "required":false
+            },
+            "cartridgeMax": {
+                "type":"number",
+                "id": "root/cartridgeMax",
+                "default":2,
+                "required":false
+            },
+            "cartridgeMin": {
+                "type":"number",
+                "id": "root/cartridgeMin",
+                "default":1,
+                "required":false
+            },
+            "subscribableInfo": {
+                "type":"object",
+                "id": "root/subscribableInfo",
+                "required":false,
+                "properties":{
+                    "alias": {
+                        "type":"string",
+                        "id": "root/subscribableInfo/alias",
+                        "default": "alias2",
+                        "required":false
+                    },
+                    "autoscalingPolicy": {
+                        "type":"string",
+                        "id": "root/subscribableInfo/autoscalingPolicy",
+                        "default": "autoscale_policy_1",
+                        "required":false
+                    },
+                    "privateRepo": {
+                        "type":"string",
+                        "id": "root/subscribableInfo/privateRepo",
+                        "default": "true",
+                        "required":false
+                    },
+                    "repoPassword": {
+                        "type":"string",
+                        "id": "root/subscribableInfo/repoPassword",
+                        "default": "password",
+                        "required":false
+                    },
+                    "repoURL": {
+                        "type":"string",
+                        "id": "root/subscribableInfo/repoURL",
+                        "default": "http://xxx:10080/git/default.git",
+                        "required":false
+                    },
+                    "repoUsername": {
+                        "type":"string",
+                        "id": "root/subscribableInfo/repoUsername",
+                        "default": "user",
+                        "required":false
+                    }
+                }
+            }
+        }
+    };
+
+var cartridgeBlockDefault = {
+                                "type":"tomcat",
+                                "cartridgeMin":1,
+                                "cartridgeMax":2,
+                                "subscribableInfo":{
+                                    "alias":"alias2",
+                                    "autoscalingPolicy":"autoscale_policy_1",
+                                    "privateRepo":"true",
+                                    "repoPassword":"password",
+                                    "repoURL":"http://xxx:10080/git/default.git",
+                                    "repoUsername":"user"
+                                }
+                            };
+
+var groupBlockTemplate = {
+    "type":"object",
+    "$schema": "http://json-schema.org/draft-03/schema",
+    "id": "root",
+    "required":false,
+    "properties":{
+        "name": {
+            "type":"string",
+            "id": "root/name",
+            "default": "name",
+            "required":false
+        },
+        "alias": {
+            "type":"string",
+            "id": "root/alias",
+            "default": "alias",
+            "required":false
+        },
+        "groupMaxInstances": {
+            "type":"number",
+            "id": "root/groupMaxInstances",
+            "default":2,
+            "required":false
+        },
+        "groupMinInstances": {
+            "type":"number",
+            "id": "root/groupMinInstances",
+            "default":1,
+            "required":false
+        },
+        "isGroupScalingEnabled": {
+            "type":"boolean",
+            "id": "root/isGroupScalingEnabled",
+            "default": "false",
+            "required":false
+        }
     }
 };
 
-var groupBlockTemplate = {
-    "name":"name",
-    "alias":"alias",
-    "groupMinInstances":1,
-    "groupMaxInstances":2,
-    "isGroupScalingEnabled":"false"
-};
+var groupBlockDefault = {
+                            "name":"group2",
+                            "alias":"group2alias",
+                            "groupMinInstances":1,
+                            "groupMaxInstances":2,
+                            "isGroupScalingEnabled":"false"
+                        };
 // Document ready events
 $(document).ready(function(){
 
@@ -434,90 +544,59 @@ $(document).ready(function(){
         activateTab('components');
         blockId = $(this).attr('id');
         var blockType = $(this).attr('data-type');
+        var startval;
+        var ctype = $(this).attr('data-ctype');
+        if(blockType == 'cartridge' || blockType == 'group-cartridge'){
+            startval = cartridgeBlockDefault;
+            startval['type'] = ctype;
+        }else{
+            startval = groupBlockDefault;
+            startval['name'] = ctype;
+        }
+
+        if($(this).attr('data-generated')) {
+            startval = JSON.parse(decodeURIComponent($(this).attr('data-generated')));
+        }
+        $('#component-data').html('');
 
         switch (blockType){
             case 'cartridge':
-                //$('#component-data').html(generateHtmlBlock(cartridgeBlockTemplate, blockId));
-                // Initialize the editor
-                editor = new JSONEditor(document.getElementById('component-data'), {
-                    // Enable fetching schemas via ajax
-                    ajax: false,
-                    disable_edit_json: true,
-                    //  disable_properties:true,
-                    // The schema for the editor
-                    schema: {"type":"object","$schema": "http://json-schema.org/draft-03/schema","id": "root","format": "grid","required":false,"properties":{ "alias": { "type":"string", "id": "root/alias", "default": "alias", "required":false }, "groupMaxInstances": { "type":"number", "id": "root/groupMaxInstances", "default":2, "required":false }, "groupMinInstances": { "type":"number", "id": "root/groupMinInstances", "default":1, "required":false }, "isGroupScalingEnabled": { "type":"boolean", "id": "root/isGroupScalingEnabled", "default": "false", "required":false }, "name": { "type":"string", "id": "root/name", "default": "name", "required":false } }},
-                    format: "grid",
-
-                    // Seed the form with a starting value
-                    startval: ''
-                });
+                generateHtmlBlock(cartridgeBlockTemplate, startval);
                 break;
 
             case 'group':
-                $('#component-data').html(generateHtmlBlock(groupBlockTemplate,blockId ));
-
+                generateHtmlBlock(groupBlockTemplate, startval)
                 break;
 
             case 'group-cartridge':
-                $('#component-data').html(generateHtmlBlock(cartridgeBlockTemplate, blockId));
+                generateHtmlBlock(cartridgeBlockTemplate, startval)
                 break;
         }
 
     });
 
-    function generateHtmlBlock(JSONTemplate, block){
-
-        var html='';
-        var JsonObject = JSONTemplate;
-
-        html += '<input type="hidden" id="block" data-selection="'+block+'">'
-        for(item in JsonObject){
-
-            if(item == 'subscribableInfo'){
-                html += '<div class="panel panel-default">'+
-                        '<div class="panel-heading">Subscribable Info</div>'+
-                        '<div class="panel-body">';
-
-                for(prop in JsonObject[item]){
-                    html += '<div class="form-group">'+
-                        '<label class="control-label" for="alias">'+prop+':</label>'+
-                        '<input type="text" class="form-control level-components" placeholder="'+JsonObject[item][prop]+
-                        '" id="'+prop+'">'+
-                        '</div>';
-                }
-
-                html += '</div></div>';
-            }else{
-                html += '<div class="form-group">'+
-                    '<label class="control-label" for="alias">'+item+':</label>'+
-                    '<input type="text" class="form-control level-components" placeholder="'+JsonObject[item]+
-                    '" id="'+item+'">'+
-                    '</div>';
-            }
-
+    function generateHtmlBlock(schema, startval){
+        // Initialize the editor
+        editor = new JSONEditor(document.getElementById('component-data'), {
+            ajax: false,
+            disable_edit_json: true,
+            schema: schema,
+            format: "grid",
+            startval: startval
+        });
+        if(editor.getEditor('root.type')){
+            editor.getEditor('root.type').disable();
+        }else{
+            editor.getEditor('root.name').disable();
         }
 
-        return html;
     }
 
     //get component JSON data
     $('#component-info-update').on('click', function(){
-
-//        console.log('click cbutton');
-//        var generatedJson = '';
-//        $('#component-data input').each(function(){
-//            var inputId = $(this).attr('id');
-//            var generatedId = '#whiteboard #'+$(this).attr('data-selection');
-//            if(inputId == 'block'){
-//                console.log( $(generatedId));
-//                $(generatedId).removeClass('input-false');
-//            }
-//           /// $('').removeClass('input-false');
-//            $(generatedId).attr('data-generated', '{ade:"pala"}');
-//        });
         console.log(editor.getValue());
         $('#'+blockId).attr('data-generated', encodeURIComponent(JSON.stringify(editor.getValue())));
-        console.log('done')
+        $('#'+blockId).removeClass('input-false');
 
     });
 
