@@ -69,6 +69,7 @@
             "startupOrders":[
                 "group1,tomcat"
             ],
+            "scalingDependents":["group"],
             "terminationBehaviour":"terminate-dependents"
         }
     }

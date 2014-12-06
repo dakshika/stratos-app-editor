@@ -183,10 +183,10 @@ function addJsplumbGroup(groupJSON, cartridgeCounter){
             DragEl($(divGroup));
 
             if(item[prop].hasOwnProperty('cartridges')) {
-                genJsplumbCartridge(item[prop].cartridges, divGroup, parentName+'.'+item[prop]['name'] );
+                genJsplumbCartridge(item[prop].cartridges, divGroup, parentName+'-'+item[prop]['name'] );
             }
             if(item[prop].hasOwnProperty('groups')) {
-                genJsplumbGroups(item[prop].groups, divGroup, parentName+'.'+item[prop]['name'])
+                genJsplumbGroups(item[prop].groups, divGroup, parentName+'-'+item[prop]['name'])
             }
         }
     }
@@ -418,18 +418,39 @@ var groupBlockTemplate = {
 // Document ready events
 $(document).ready(function(){
 
+
+    //*******************Adding JSON editor *************//
+    JSONEditor.defaults.theme = 'bootstrap3';
+    JSONEditor.defaults.iconlib = 'fontawesome4';
+    JSONEditor.defaults.show_errors = "always";
+    var editor, blockId;
+
+
     DragEl(".stepnode");
     Repaint();
 
     $('#whiteboard').on('dblclick', '.stepnode', function(){
         //get tab activated
         activateTab('components');
-        var blockId = $(this).attr('id');
+        blockId = $(this).attr('id');
         var blockType = $(this).attr('data-type');
 
         switch (blockType){
             case 'cartridge':
-                $('#component-data').html(generateHtmlBlock(cartridgeBlockTemplate, blockId));
+                //$('#component-data').html(generateHtmlBlock(cartridgeBlockTemplate, blockId));
+                // Initialize the editor
+                editor = new JSONEditor(document.getElementById('component-data'), {
+                    // Enable fetching schemas via ajax
+                    ajax: false,
+                    disable_edit_json: true,
+                    //  disable_properties:true,
+                    // The schema for the editor
+                    schema: {"type":"object","$schema": "http://json-schema.org/draft-03/schema","id": "root","format": "grid","required":false,"properties":{ "alias": { "type":"string", "id": "root/alias", "default": "alias", "required":false }, "groupMaxInstances": { "type":"number", "id": "root/groupMaxInstances", "default":2, "required":false }, "groupMinInstances": { "type":"number", "id": "root/groupMinInstances", "default":1, "required":false }, "isGroupScalingEnabled": { "type":"boolean", "id": "root/isGroupScalingEnabled", "default": "false", "required":false }, "name": { "type":"string", "id": "root/name", "default": "name", "required":false } }},
+                    format: "grid",
+
+                    // Seed the form with a starting value
+                    startval: ''
+                });
                 break;
 
             case 'group':
@@ -481,16 +502,23 @@ $(document).ready(function(){
 
     //get component JSON data
     $('#component-info-update').on('click', function(){
-        console.log('click cbutton')
-        $('#component-data input').each(function(){
-            var inputId = $(this).attr('id');
 
-            if(inputId == 'block'){
-                console.log( $('#whiteboard #'+$(this).attr('data-selection')))
-                $('#whiteboard #'+$(this).attr('data-selection')).removeClass('input-false');
-            }
-           /// $('').removeClass('input-false');
-        });
+//        console.log('click cbutton');
+//        var generatedJson = '';
+//        $('#component-data input').each(function(){
+//            var inputId = $(this).attr('id');
+//            var generatedId = '#whiteboard #'+$(this).attr('data-selection');
+//            if(inputId == 'block'){
+//                console.log( $(generatedId));
+//                $(generatedId).removeClass('input-false');
+//            }
+//           /// $('').removeClass('input-false');
+//            $(generatedId).attr('data-generated', '{ade:"pala"}');
+//        });
+        console.log(editor.getValue());
+        $('#'+blockId).attr('data-generated', encodeURIComponent(JSON.stringify(editor.getValue())));
+        console.log('done')
+
     });
 
 
