@@ -56,7 +56,7 @@
                 "cartridgeMin":1,
                 "cartridgeMax":2,
                 "subscribableInfo":{
-                    "alias":"alias1",
+                    "alias":"tomcatalias1",
                     "autoscalingPolicy":"autoscale_policy_1",
                     "privateRepo":"true",
                     "repoPassword":"password",
@@ -67,7 +67,7 @@
         ],
         "dependencies":{
             "startupOrders":[
-                "group1,tomcat"
+                "group2alias,tomcatalias1"
             ],
             "scalingDependents":["group"],
             "terminationBehaviour":"terminate-dependents"

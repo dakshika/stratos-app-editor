@@ -351,11 +351,13 @@ function deleteNode(endPoint){
 //genrate context menu for nodes
 $(function(){
     $.contextMenu({
-        selector: '.stepnodeTODO',
+        selector: '.stepnode',
         callback: function(key, options) {
             var m = "clicked: " + key + $(this);
             if(key == 'delete'){
                 deleteNode($(this));
+            }else if(key == 'edit'){
+
             }
 
             window.console && console.log($(this));
@@ -394,8 +396,8 @@ function generateJsplumbTree(collector, connections){
     for (var i = 0; i < scalingDependents.length; i++) {
         scalingDependents[i] = scalingDependents[i].replace(/"/g, "");
     }
-    collector['components']['dependencies']['startupOrders'] = [startupOrders];
-    collector['components']['dependencies']['scalingDependents'] = [scalingDependents];
+    collector['components']['dependencies']['startupOrders'] = startupOrders;
+    collector['components']['dependencies']['scalingDependents'] = scalingDependents;
     collector['components']['dependencies']['terminationBehaviour']=$('select#terminationBehaviour').val();
 
     //generate raw data tree from connections
@@ -621,7 +623,12 @@ $(document).ready(function(){
 
     $('#whiteboard').on('dblclick', '.stepnode', function(){
         //get tab activated
-        activateTab('components');
+        if($(this).attr('id') == 'applicationId'){
+            activateTab('general');
+        }else{
+            activateTab('components');
+        }
+
         blockId = $(this).attr('id');
         var blockType = $(this).attr('data-type');
         var startval;
@@ -674,7 +681,6 @@ $(document).ready(function(){
 
     //get component JSON data
     $('#component-info-update').on('click', function(){
-        console.log(editor.getValue());
         $('#'+blockId).attr('data-generated', encodeURIComponent(JSON.stringify(editor.getValue())));
         $('#'+blockId).removeClass('input-false');
 
@@ -753,11 +759,6 @@ $(document).ready(function(){
         cartridgeCounter++;
     });
 
-    //get update button status on general tab
-    $("#general-info-update").on('click', function(){
-        var getEditorConnections = jsPlumb.getConnections();
-        applicationJsonBuilder(applicationJson,getEditorConnections);
-    });
 
 });
 
