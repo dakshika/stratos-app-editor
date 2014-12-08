@@ -131,7 +131,7 @@ function addJsplumbGroup(groupJSON, cartridgeCounter){
     function genJsplumbCartridge(item, currentParent, parentName){
         for (var i = 0; i < item.length; i++) {
             var id = item[i];
-            var divCartridge = $('<div>').attr({'id':cartridgeCounter+'-'+parentName+'-'+item[i],'data-type':'group-cartridge','data-ctype':item[i]} )
+            var divCartridge = $('<div>').attr({'id':cartridgeCounter+'-'+parentName+'-'+item[i],'data-type':'cartridge','data-ctype':item[i]} )
                                 .text(item[i])
                                 .addClass('input-false')
                                 .addClass('stepnode')
@@ -381,8 +381,8 @@ function applicationJsonBuilder(collector, input){
     });
     collector['components']={};
     collector['components']['dependencies']={};
-    collector['components']['groups']={};
-    collector['components']['cartridges']={};
+    collector['components']['groups']=[];
+    collector['components']['cartridges']=[];
     collector['components']['dependencies']['startupOrders']=[];
     collector['components']['dependencies']['scalingDependents']=[];
     //TODO need to convert string into array
@@ -390,8 +390,122 @@ function applicationJsonBuilder(collector, input){
     collector['components']['dependencies']['scalingDependents'] = [$('input#scalingDependents').val()];
     collector['components']['dependencies']['terminationBehaviour']=$('select#terminationBehaviour').val();
 
+    //generate tree from data
+    var connections = [];
+    $.each(jsPlumb.getConnections(), function (idx, connection) {
 
-    console.log(JSON.stringify(collector));
+        var child = $('#'+connection.targetId).attr('data-generated');
+        var parent = $('#'+connection.sourceId).attr('data-generated');
+        var targetDataType = $('#'+connection.targetId).attr('data-type');
+        if(parent ===  undefined && targetDataType == 'cartridge'){
+            collector['components']['cartridges'].push(JSON.parse(decodeURIComponent(child)));
+        }else if(parent ===  undefined && targetDataType == 'group'){
+            collector['components']['groups'].push(JSON.parse(decodeURIComponent(child)));
+        }else if(targetDataType == 'group-cartridge'){
+            console.log((connection.sourceId).split('-')[1] + '  ---- ');
+            var childData = JSON.parse(decodeURIComponent(child));
+            console.log(test['subscribableInfo']['alias'])
+
+        }
+
+
+
+
+    });
+
+    console.log(collector)
+
+}
+
+function generateJsplumbTree(collector, connections){
+
+    //get genral data
+    $('input.level-root').each(function(){
+        var inputId = $(this).attr('id');
+        collector[inputId] = $(this).val();
+    });
+    collector['components']={};
+    collector['components']['dependencies']={};
+    collector['components']['groups']=[];
+    collector['components']['cartridges']=[];
+    collector['components']['dependencies']['startupOrders']=[];
+    collector['components']['dependencies']['scalingDependents']=[];
+    //TODO need to convert string into array
+    collector['components']['dependencies']['startupOrders'] = [$('input#startupOrders').val()];
+    collector['components']['dependencies']['scalingDependents'] = [$('input#scalingDependents').val()];
+    collector['components']['dependencies']['terminationBehaviour']=$('select#terminationBehaviour').val();
+
+    var rawtree = [];
+    $.each(jsPlumb.getConnections(), function (idx, connection) {
+        var dataType = $('#'+connection.targetId).attr('data-type');
+        var jsonContent = JSON.parse(decodeURIComponent($('#'+connection.targetId).attr('data-generated')));
+        rawtree.push({
+            parent: connection.sourceId,
+            content: jsonContent,
+            dtype:dataType,
+            id: connection.targetId
+        });
+    });
+
+    //console.log(rawtree)
+    var nodes = [];
+    var toplevelNodes = [];
+    var lookupList = {};
+
+    for (var i = 0; i < rawtree.length; i++) {
+        var n = rawtree[i].content;
+        if(rawtree[i].dtype == 'cartridge'){
+            n.id =  rawtree[i].id;
+            n.parent_id = ((rawtree[i].parent == 'applicationId') ? 'applicationId': rawtree[i].parent);
+            n.dtype =rawtree[i].dtype;
+        }else if(rawtree[i].dtype == 'group'){
+            n.id =  rawtree[i].id;
+            n.parent_id = ((rawtree[i].parent == 'applicationId') ? 'applicationId': rawtree[i].parent);
+            n.dtype =rawtree[i].dtype;
+            n.groups = [];
+            n.cartridges =[];
+        }
+
+        lookupList[n.id] = n;
+        nodes.push(n);
+
+        if (n.parent_id == 'applicationId' && rawtree[i].dtype == 'cartridge') {
+            collector['components']['cartridges'].push(n);
+        }else if(n.parent_id == 'applicationId' && rawtree[i].dtype == 'group'){
+            collector['components']['groups'].push(n);
+        }
+
+    }
+
+    //merge any root level stuffs
+    for (var i = 0; i < nodes.length; i++) {
+        var n = nodes[i];
+        if (!(n.parent_id == 'applicationId') && n.dtype == 'cartridge') {
+            lookupList[n.parent_id]['cartridges'] = lookupList[n.parent_id]['cartridges'].concat([n]);
+        }else if(!(n.parent_id == 'applicationId') && n.dtype == 'group'){
+            lookupList[n.parent_id]['groups'] = lookupList[n.parent_id]['groups'].concat([n]);
+        }
+    }
+
+    //cleanup JSON
+    function traverse(o) {
+        for (var i in o) {
+            if(i == 'id' || i == 'parent_id' || i == 'dtype'){
+                delete o[i];
+            }else if(i == 'groups' && o[i].length == 0){
+                delete o[i];
+            }
+            if (o[i] !== null && typeof(o[i])=="object") {
+                //going on step down in the object tree!!
+                traverse(o[i]);
+            }
+        }
+    }
+
+    traverse(collector);
+
+   console.log(JSON.stringify(collector));
+    $('#messages').html(JSON.stringify(collector, null, 4))
 }
 
 //setting up schema and defaults
@@ -528,7 +642,9 @@ var groupBlockDefault = {
 // Document ready events
 $(document).ready(function(){
 
-
+    $('#app-generate').on('click', function(){
+        generateJsplumbTree(applicationJson, jsPlumb.getConnections());
+    });
     //*******************Adding JSON editor *************//
     JSONEditor.defaults.theme = 'bootstrap3';
     JSONEditor.defaults.iconlib = 'fontawesome4';
@@ -565,11 +681,11 @@ $(document).ready(function(){
                 break;
 
             case 'group':
-                generateHtmlBlock(groupBlockTemplate, startval)
+                generateHtmlBlock(groupBlockTemplate, startval);
                 break;
 
             case 'group-cartridge':
-                generateHtmlBlock(cartridgeBlockTemplate, startval)
+                generateHtmlBlock(cartridgeBlockTemplate, startval);
                 break;
         }
 
@@ -675,7 +791,8 @@ $(document).ready(function(){
 
     //get update button status on general tab
     $("#general-info-update").on('click', function(){
-        applicationJsonBuilder(applicationJson);
+        var getEditorConnections = jsPlumb.getConnections();
+        applicationJsonBuilder(applicationJson,getEditorConnections);
     });
 
 });
