@@ -372,54 +372,9 @@ $(function(){
 
 var applicationJson = {};
 //Definition JSON builder
-function applicationJsonBuilder(collector, input){
-
-    //get genral data
-    $('input.level-root').each(function(){
-        var inputId = $(this).attr('id');
-        collector[inputId] = $(this).val();
-    });
-    collector['components']={};
-    collector['components']['dependencies']={};
-    collector['components']['groups']=[];
-    collector['components']['cartridges']=[];
-    collector['components']['dependencies']['startupOrders']=[];
-    collector['components']['dependencies']['scalingDependents']=[];
-    //TODO need to convert string into array
-    collector['components']['dependencies']['startupOrders'] = [$('input#startupOrders').val()];
-    collector['components']['dependencies']['scalingDependents'] = [$('input#scalingDependents').val()];
-    collector['components']['dependencies']['terminationBehaviour']=$('select#terminationBehaviour').val();
-
-    //generate tree from data
-    var connections = [];
-    $.each(jsPlumb.getConnections(), function (idx, connection) {
-
-        var child = $('#'+connection.targetId).attr('data-generated');
-        var parent = $('#'+connection.sourceId).attr('data-generated');
-        var targetDataType = $('#'+connection.targetId).attr('data-type');
-        if(parent ===  undefined && targetDataType == 'cartridge'){
-            collector['components']['cartridges'].push(JSON.parse(decodeURIComponent(child)));
-        }else if(parent ===  undefined && targetDataType == 'group'){
-            collector['components']['groups'].push(JSON.parse(decodeURIComponent(child)));
-        }else if(targetDataType == 'group-cartridge'){
-            console.log((connection.sourceId).split('-')[1] + '  ---- ');
-            var childData = JSON.parse(decodeURIComponent(child));
-            console.log(test['subscribableInfo']['alias'])
-
-        }
-
-
-
-
-    });
-
-    console.log(collector)
-
-}
-
 function generateJsplumbTree(collector, connections){
 
-    //get genral data
+    //get general data
     $('input.level-root').each(function(){
         var inputId = $(this).attr('id');
         collector[inputId] = $(this).val();
@@ -430,11 +385,20 @@ function generateJsplumbTree(collector, connections){
     collector['components']['cartridges']=[];
     collector['components']['dependencies']['startupOrders']=[];
     collector['components']['dependencies']['scalingDependents']=[];
-    //TODO need to convert string into array
-    collector['components']['dependencies']['startupOrders'] = [$('input#startupOrders').val()];
-    collector['components']['dependencies']['scalingDependents'] = [$('input#scalingDependents').val()];
+    var startupOrders = $('input#startupOrders').val().split(' ').join('').split(/["][,]+/g);
+    for (var i = 0; i < startupOrders.length; i++) {
+        startupOrders[i] = startupOrders[i].replace(/"/g, "");
+    }
+
+    var scalingDependents = $('input#scalingDependents').val().split(' ').join('').split(/["][,]+/g);
+    for (var i = 0; i < scalingDependents.length; i++) {
+        scalingDependents[i] = scalingDependents[i].replace(/"/g, "");
+    }
+    collector['components']['dependencies']['startupOrders'] = [startupOrders];
+    collector['components']['dependencies']['scalingDependents'] = [scalingDependents];
     collector['components']['dependencies']['terminationBehaviour']=$('select#terminationBehaviour').val();
 
+    //generate raw data tree from connections
     var rawtree = [];
     $.each(jsPlumb.getConnections(), function (idx, connection) {
         var dataType = $('#'+connection.targetId).attr('data-type');
@@ -447,7 +411,7 @@ function generateJsplumbTree(collector, connections){
         });
     });
 
-    //console.log(rawtree)
+    //generate heirache by adding json and extra info
     var nodes = [];
     var toplevelNodes = [];
     var lookupList = {};
@@ -487,7 +451,7 @@ function generateJsplumbTree(collector, connections){
         }
     }
 
-    //cleanup JSON
+    //cleanup JSON, remove extra items added to object level
     function traverse(o) {
         for (var i in o) {
             if(i == 'id' || i == 'parent_id' || i == 'dtype'){
@@ -503,7 +467,7 @@ function generateJsplumbTree(collector, connections){
     }
 
     traverse(collector);
-
+    console.log(collector)
    console.log(JSON.stringify(collector));
     $('#messages').html(JSON.stringify(collector, null, 4))
 }
