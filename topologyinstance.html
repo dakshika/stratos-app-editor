@@ -56,397 +56,7 @@
 </style>
 <script type="text/javascript">
 
-var originaldata = {
-    "applicationInstances":[
-        {
-            "applicationId":"app_boo",
-            "clusterInstances":[
-                {
-                    "alias":"mytomcat",
-                    "clusterId":"mytomcat.tomcat.domain",
-                    "hostNames":[
-                        "mytomcat.isuruh.lk"
-                    ],
-                    "instanceId":"app_boo-1",
-                    "member":[
-                        {
-                            "clusterId":"mytomcat.tomcat.domain",
-                            "memberId":"mytomcat.tomcat.domain5dd58649-0469-481e-a91e-75894069720c",
-                            "memberIp":"10.0.0.5",
-                            "memberPublicIp":"20.0.0.5",
-                            "networkPartitionId":"openstack_R1",
-                            "partitionId":"P1",
-                            "property":[
-                                {
-                                    "name":"PRIMARY",
-                                    "value":false
-                                },
-                                {
-                                    "name":"MIN_COUNT",
-                                    "value":1
-                                }
-                            ],
-                            "serviceName":"tomcat",
-                            "status":"Activated"
-                        },
-                        {
-                            "clusterId":"mytomcat.tomcat.domain",
-                            "memberId":"mytomcat.tomcat.domain368ebab7-f00e-4426-98e0-c929a0f1c6aa",
-                            "memberIp":"10.0.0.10",
-                            "memberPublicIp":"20.0.0.10",
-                            "networkPartitionId":"openstack_R1",
-                            "partitionId":"P1",
-                            "property":[
-                                {
-                                    "name":"PRIMARY",
-                                    "value":false
-                                },
-                                {
-                                    "name":"MIN_COUNT",
-                                    "value":1
-                                }
-                            ],
-                            "serviceName":"tomcat",
-                            "status":"Activated"
-                        }
-                    ],
-                    "parentInstanceId":"app_boo-1",
-                    "serviceName":"tomcat",
-                    "status":"Active",
-                    "tenantRange":"*"
-                }
-            ],
-            "groupInstances":[
-                {
-                    "clusterInstances":[
-                        {
-                            "alias":"group8tom",
-                            "clusterId":"group8tom.tomcat2.domain",
-                            "hostNames":[
-                                "group8tom.isuruh.lk"
-                            ],
-                            "instanceId":"app_boo-1",
-                            "member":[
-                                {
-                                    "clusterId":"group8tom.tomcat2.domain",
-                                    "memberId":"group8tom.tomcat2.domaine03864dc-d3b2-4417-adde-7ae8c76c72ca",
-                                    "memberIp":"10.0.0.2",
-                                    "memberPublicIp":"20.0.0.2",
-                                    "networkPartitionId":"openstack_R1",
-                                    "partitionId":"P1",
-                                    "property":[
-                                        {
-                                            "name":"PRIMARY",
-                                            "value":false
-                                        },
-                                        {
-                                            "name":"MIN_COUNT",
-                                            "value":1
-                                        }
-                                    ],
-                                    "serviceName":"tomcat2",
-                                    "status":"Activated"
-                                },
-                                {
-                                    "clusterId":"group8tom.tomcat2.domain",
-                                    "memberId":"group8tom.tomcat2.domainb0296d1a-4831-463a-b8a5-eae45fa9825d",
-                                    "memberIp":"10.0.0.7",
-                                    "memberPublicIp":"20.0.0.7",
-                                    "networkPartitionId":"openstack_R1",
-                                    "partitionId":"P1",
-                                    "property":[
-                                        {
-                                            "name":"PRIMARY",
-                                            "value":false
-                                        },
-                                        {
-                                            "name":"MIN_COUNT",
-                                            "value":1
-                                        }
-                                    ],
-                                    "serviceName":"tomcat2",
-                                    "status":"Activated"
-                                }
-                            ],
-                            "parentInstanceId":"app_boo-1",
-                            "serviceName":"tomcat2",
-                            "status":"Active",
-                            "tenantRange":"*"
-                        }
-                    ],
-                    "groupId":"mygroup8",
-                    "groupInstances":[
-                        {
-                            "clusterInstances":[
-                                {
-                                    "alias":"group9tom",
-                                    "clusterId":"group9tom.tomcat1.domain",
-                                    "hostNames":[
-                                        "group9tom.isuruh.lk"
-                                    ],
-                                    "instanceId":"app_boo-1",
-                                    "member":[
-                                        {
-                                            "clusterId":"group9tom.tomcat1.domain",
-                                            "memberId":"group9tom.tomcat1.domain6dcd4cd8-1727-473d-83ff-30411050b37c",
-                                            "memberIp":"10.0.0.1",
-                                            "memberPublicIp":"20.0.0.1",
-                                            "networkPartitionId":"openstack_R1",
-                                            "partitionId":"P1",
-                                            "property":[
-                                                {
-                                                    "name":"PRIMARY",
-                                                    "value":false
-                                                },
-                                                {
-                                                    "name":"MIN_COUNT",
-                                                    "value":1
-                                                }
-                                            ],
-                                            "serviceName":"tomcat1",
-                                            "status":"Activated"
-                                        },
-                                        {
-                                            "clusterId":"group9tom.tomcat1.domain",
-                                            "memberId":"group9tom.tomcat1.domain199e4e9c-555b-4afc-a0dc-8cd277c9bf62",
-                                            "memberIp":"10.0.0.6",
-                                            "memberPublicIp":"20.0.0.6",
-                                            "networkPartitionId":"openstack_R1",
-                                            "partitionId":"P1",
-                                            "property":[
-                                                {
-                                                    "name":"PRIMARY",
-                                                    "value":false
-                                                },
-                                                {
-                                                    "name":"MIN_COUNT",
-                                                    "value":1
-                                                }
-                                            ],
-                                            "serviceName":"tomcat1",
-                                            "status":"Activated"
-                                        }
-                                    ],
-                                    "parentInstanceId":"app_boo-1",
-                                    "serviceName":"tomcat1",
-                                    "status":"Active",
-                                    "tenantRange":"*"
-                                }
-                            ],
-                            "groupId":"mygroup9",
-                            "instanceId":"app_boo-1",
-                            "parentInstanceId":"app_boo-1",
-                            "status":"Active"
-                        },
-                        {
-                            "clusterInstances":[
-                                {
-                                    "alias":"group9tom",
-                                    "clusterId":"group9tom.tomcat1.domain",
-                                    "hostNames":[
-                                        "group9tom.isuruh.lk"
-                                    ],
-                                    "instanceId":"app_boo-1",
-                                    "member":[
-                                        {
-                                            "clusterId":"group9tom.tomcat1.domain",
-                                            "memberId":"group9tom.tomcat1.domain6dcd4cd8-1727-473d-83ff-30411050b37c",
-                                            "memberIp":"10.0.0.1",
-                                            "memberPublicIp":"20.0.0.1",
-                                            "networkPartitionId":"openstack_R1",
-                                            "partitionId":"P1",
-                                            "property":[
-                                                {
-                                                    "name":"PRIMARY",
-                                                    "value":false
-                                                },
-                                                {
-                                                    "name":"MIN_COUNT",
-                                                    "value":1
-                                                }
-                                            ],
-                                            "serviceName":"tomcat1",
-                                            "status":"Activated"
-                                        },
-                                        {
-                                            "clusterId":"group9tom.tomcat1.domain",
-                                            "memberId":"group9tom.tomcat1.domain199e4e9c-555b-4afc-a0dc-8cd277c9bf62",
-                                            "memberIp":"10.0.0.6",
-                                            "memberPublicIp":"20.0.0.6",
-                                            "networkPartitionId":"openstack_R1",
-                                            "partitionId":"P1",
-                                            "property":[
-                                                {
-                                                    "name":"PRIMARY",
-                                                    "value":false
-                                                },
-                                                {
-                                                    "name":"MIN_COUNT",
-                                                    "value":1
-                                                }
-                                            ],
-                                            "serviceName":"tomcat1",
-                                            "status":"Activated"
-                                        }
-                                    ],
-                                    "parentInstanceId":"app_boo-1",
-                                    "serviceName":"tomcat1",
-                                    "status":"Active",
-                                    "tenantRange":"*"
-                                }
-                            ],
-                            "groupId":"mygroup9-1",
-                            "instanceId":"app_boo-1",
-                            "parentInstanceId":"app_boo-1",
-                            "status":"Active"
-                        }
-                    ],
-                    "instanceId":"app_boo-1",
-                    "parentInstanceId":"app_boo-1",
-                    "status":"Active"
-                },
-                {
-                    "clusterInstances":[
-                        {
-                            "alias":"group6tom",
-                            "clusterId":"group6tom.tomcat2.domain",
-                            "hostNames":[
-                                "group6tom.isuruh.lk"
-                            ],
-                            "instanceId":"app_boo-1",
-                            "member":[
-                                {
-                                    "clusterId":"group6tom.tomcat2.domain",
-                                    "memberId":"group6tom.tomcat2.domaina178f042-416f-48c4-a0d6-d0792bee9232",
-                                    "memberIp":"10.0.0.4",
-                                    "memberPublicIp":"20.0.0.4",
-                                    "networkPartitionId":"openstack_R1",
-                                    "partitionId":"P1",
-                                    "property":[
-                                        {
-                                            "name":"PRIMARY",
-                                            "value":false
-                                        },
-                                        {
-                                            "name":"MIN_COUNT",
-                                            "value":1
-                                        }
-                                    ],
-                                    "serviceName":"tomcat2",
-                                    "status":"Activated"
-                                },
-                                {
-                                    "clusterId":"group6tom.tomcat2.domain",
-                                    "memberId":"group6tom.tomcat2.domain6eb8f988-fad5-4fe8-b3c5-e766f1831aef",
-                                    "memberIp":"10.0.0.9",
-                                    "memberPublicIp":"20.0.0.9",
-                                    "networkPartitionId":"openstack_R1",
-                                    "partitionId":"P1",
-                                    "property":[
-                                        {
-                                            "name":"PRIMARY",
-                                            "value":false
-                                        },
-                                        {
-                                            "name":"MIN_COUNT",
-                                            "value":1
-                                        }
-                                    ],
-                                    "serviceName":"tomcat2",
-                                    "status":"Activated"
-                                }
-                            ],
-                            "parentInstanceId":"app_boo-1",
-                            "serviceName":"tomcat2",
-                            "status":"Active",
-                            "tenantRange":"*"
-                        }
-                    ],
-                    "groupId":"mygroup6",
-                    "groupInstances":[
-                        {
-                            "clusterInstances":[
-                                {
-                                    "alias":"group7tom",
-                                    "clusterId":"group7tom.tomcat1.domain",
-                                    "hostNames":[
-                                        "group7tom.isuruh.lk"
-                                    ],
-                                    "instanceId":"app_boo-1",
-                                    "member":[
-                                        {
-                                            "clusterId":"group7tom.tomcat1.domain",
-                                            "memberId":"group7tom.tomcat1.domain46df8a78-fb79-4698-a7d1-3a1cc3dac7b3",
-                                            "memberIp":"10.0.0.3",
-                                            "memberPublicIp":"20.0.0.3",
-                                            "networkPartitionId":"openstack_R1",
-                                            "partitionId":"P1",
-                                            "property":[
-                                                {
-                                                    "name":"PRIMARY",
-                                                    "value":false
-                                                },
-                                                {
-                                                    "name":"MIN_COUNT",
-                                                    "value":1
-                                                }
-                                            ],
-                                            "serviceName":"tomcat1",
-                                            "status":"Activated"
-                                        },
-                                        {
-                                            "clusterId":"group7tom.tomcat1.domain",
-                                            "memberId":"group7tom.tomcat1.domain88b8ff52-d6fd-49da-a556-b74eba27f046",
-                                            "memberIp":"10.0.0.8",
-                                            "memberPublicIp":"20.0.0.8",
-                                            "networkPartitionId":"openstack_R1",
-                                            "partitionId":"P1",
-                                            "property":[
-                                                {
-                                                    "name":"PRIMARY",
-                                                    "value":false
-                                                },
-                                                {
-                                                    "name":"MIN_COUNT",
-                                                    "value":1
-                                                }
-                                            ],
-                                            "serviceName":"tomcat1",
-                                            "status":"Activated"
-                                        }
-                                    ],
-                                    "parentInstanceId":"app_boo-1",
-                                    "serviceName":"tomcat1",
-                                    "status":"Active",
-                                    "tenantRange":"*"
-                                }
-                            ],
-                            "groupId":"mygroup7",
-                            "instanceId":"app_boo-1",
-                            "parentInstanceId":"app_boo-1",
-                            "status":"Active"
-                        }
-                    ],
-                    "instanceId":"app_boo-1",
-                    "parentInstanceId":"app_boo-1",
-                    "status":"Active"
-                }
-            ],
-            "instanceId":"app_boo-1",
-            "status":"Active"
-        },
-        {
-            "applicationId":"app_boo",
-            "clusterInstances":[],
-            "groupInstances":[],
-            "instanceId":"app_boo-2",
-            "status":"Active"
-        }
-    ],
-    "id":"app_boo",
-    "tenantAdminUsername":"admin",
-    "tenantDomain":"carbon.super"
-};
+var originaldata = {"applicationInstances":[{"applicationId":"appscaling","clusterInstances":[{"alias":"myc4","clusterId":"myc4.c4.domain","hostNames":["myc4.stratos.apache.org"],"instanceId":"appscaling-1","member":[{"clusterId":"myc4.c4.domain","defaultPrivateIP":"10.0.0.6","defaultPublicIP":"20.0.0.6","memberId":"myc4.c4.domaina8db72de-6a0b-4390-8a55-57342901b56d","networkPartitionId":"openstack_R1","partitionId":"P1","property":[{"name":"PRIMARY","value":false},{"name":"MIN_COUNT","value":1}],"serviceName":"c4","status":"Activated"}],"parentInstanceId":"appscaling-1","serviceName":"c4","status":"Active","tenantRange":"*"}],"groupInstances":[{"clusterInstances":[{"alias":"group1c1","clusterId":"group1c1.c1.domain","hostNames":["group1c1.stratos.apache.org"],"instanceId":"appscaling-1","member":[{"clusterId":"group1c1.c1.domain","defaultPrivateIP":"10.0.0.1","defaultPublicIP":"20.0.0.1","memberId":"group1c1.c1.domain20091dbf-2b44-44c3-8f35-ff2777229ecd","networkPartitionId":"openstack_R1","partitionId":"P1","property":[{"name":"PRIMARY","value":false},{"name":"MIN_COUNT","value":2}],"serviceName":"c1","status":"Activated"},{"clusterId":"group1c1.c1.domain","defaultPrivateIP":"10.0.0.2","defaultPublicIP":"20.0.0.2","memberId":"group1c1.c1.domaincd1c5909-7a61-4b42-a206-26949f195a1e","networkPartitionId":"openstack_R1","partitionId":"P1","property":[{"name":"PRIMARY","value":false},{"name":"MIN_COUNT","value":2}],"serviceName":"c1","status":"Activated"},{"clusterId":"group1c1.c1.domain","defaultPrivateIP":"10.0.0.10","defaultPublicIP":"20.0.0.10","memberId":"group1c1.c1.domaind9ae92c3-a7f8-4b85-a88e-46011465c166","networkPartitionId":"openstack_R1","partitionId":"P1","property":[{"name":"PRIMARY","value":false},{"name":"MIN_COUNT","value":2}],"serviceName":"c1","status":"Activated"},{"clusterId":"group1c1.c1.domain","defaultPrivateIP":"10.0.0.11","defaultPublicIP":"20.0.0.11","memberId":"group1c1.c1.domain4743548a-454a-4e2e-828e-df65bfb4a3aa","networkPartitionId":"openstack_R1","partitionId":"P1","property":[{"name":"PRIMARY","value":false},{"name":"MIN_COUNT","value":2}],"serviceName":"c1","status":"Activated"}],"parentInstanceId":"appscaling-1","serviceName":"c1","status":"Active","tenantRange":"*"}],"groupId":"mygroup1","groupInstances":[{"clusterInstances":[{"alias":"group2c3","clusterId":"group2c3.c3.domain","hostNames":["group2c3.stratos.apache.org"],"instanceId":"mygroup2-1","member":[{"clusterId":"group2c3.c3.domain","defaultPrivateIP":"10.0.0.3","defaultPublicIP":"20.0.0.3","memberId":"group2c3.c3.domain8e957510-e3ca-431a-b8a6-caedd292e5ba","networkPartitionId":"openstack_R1","partitionId":"P1","property":[{"name":"PRIMARY","value":false},{"name":"MIN_COUNT","value":1}],"serviceName":"c3","status":"Activated"},{"clusterId":"group2c3.c3.domain","defaultPrivateIP":"10.0.0.7","defaultPublicIP":"20.0.0.7","memberId":"group2c3.c3.domain2733f174-79f1-4b53-8633-76d57b928ff9","networkPartitionId":"openstack_R1","partitionId":"P1","property":[{"name":"PRIMARY","value":false},{"name":"MIN_COUNT","value":1}],"serviceName":"c3","status":"Activated"}],"parentInstanceId":"mygroup2-1","serviceName":"c3","status":"Active","tenantRange":"*"},{"alias":"group2c2","clusterId":"group2c2.c2.domain","hostNames":["group2c2.stratos.apache.org"],"instanceId":"mygroup2-1","member":[{"clusterId":"group2c2.c2.domain","defaultPrivateIP":"10.0.0.4","defaultPublicIP":"20.0.0.4","memberId":"group2c2.c2.domain4513a689-3545-4928-9c00-8998213bcbe4","networkPartitionId":"openstack_R1","partitionId":"P1","property":[{"name":"PRIMARY","value":false},{"name":"MIN_COUNT","value":2}],"serviceName":"c2","status":"Activated"},{"clusterId":"group2c2.c2.domain","defaultPrivateIP":"10.0.0.5","defaultPublicIP":"20.0.0.5","memberId":"group2c2.c2.domainebff7511-10f8-420a-86e0-ee38cce548bf","networkPartitionId":"openstack_R1","partitionId":"P1","property":[{"name":"PRIMARY","value":false},{"name":"MIN_COUNT","value":2}],"serviceName":"c2","status":"Activated"},{"clusterId":"group2c2.c2.domain","defaultPrivateIP":"10.0.0.8","defaultPublicIP":"20.0.0.8","memberId":"group2c2.c2.domainff28d15c-8091-4cf2-8be5-724f7d90a98b","networkPartitionId":"openstack_R1","partitionId":"P1","property":[{"name":"PRIMARY","value":false},{"name":"MIN_COUNT","value":2}],"serviceName":"c2","status":"Activated"},{"clusterId":"group2c2.c2.domain","defaultPrivateIP":"10.0.0.9","defaultPublicIP":"20.0.0.9","memberId":"group2c2.c2.domain28215226-a354-4fd2-afde-3007d5695223","networkPartitionId":"openstack_R1","partitionId":"P1","property":[{"name":"PRIMARY","value":false},{"name":"MIN_COUNT","value":2}],"serviceName":"c2","status":"Activated"}],"parentInstanceId":"mygroup2-1","serviceName":"c2","status":"Active","tenantRange":"*"}],"groupId":"mygroup2","instanceId":"mygroup2-1","parentInstanceId":"appscaling-1","status":"Active"},{"clusterInstances":[{"alias":"group2c3","clusterId":"group2c3.c3.domain","hostNames":["group2c3.stratos.apache.org"],"instanceId":"mygroup2-2","member":[{"clusterId":"group2c3.c3.domain","defaultPrivateIP":"10.0.0.12","defaultPublicIP":"20.0.0.12","memberId":"group2c3.c3.domain12b7733f-ee71-42d4-9942-52f909747210","networkPartitionId":"openstack_R1","partitionId":"P1","property":[{"name":"PRIMARY","value":false},{"name":"MIN_COUNT","value":1}],"serviceName":"c3","status":"Activated"}],"parentInstanceId":"mygroup2-2","serviceName":"c3","status":"Active","tenantRange":"*"},{"alias":"group2c2","clusterId":"group2c2.c2.domain","hostNames":["group2c2.stratos.apache.org"],"instanceId":"mygroup2-2","member":[{"clusterId":"group2c2.c2.domain","defaultPrivateIP":"10.0.0.13","defaultPublicIP":"20.0.0.13","memberId":"group2c2.c2.domaincfa043ba-b170-4247-8b07-bd5341103e35","networkPartitionId":"openstack_R1","partitionId":"P1","property":[{"name":"PRIMARY","value":false},{"name":"MIN_COUNT","value":2}],"serviceName":"c2","status":"Activated"},{"clusterId":"group2c2.c2.domain","defaultPrivateIP":"10.0.0.14","defaultPublicIP":"20.0.0.14","memberId":"group2c2.c2.domain0bf61514-621d-4385-b54f-11a7e3ca50db","networkPartitionId":"openstack_R1","partitionId":"P1","property":[{"name":"PRIMARY","value":false},{"name":"MIN_COUNT","value":2}],"serviceName":"c2","status":"Activated"}],"parentInstanceId":"mygroup2-2","serviceName":"c2","status":"Active","tenantRange":"*"}],"groupId":"mygroup2","instanceId":"mygroup2-2","parentInstanceId":"appscaling-1","status":"Active"}],"instanceId":"appscaling-1","parentInstanceId":"appscaling-1","status":"Active"}],"instanceId":"appscaling-1","status":"Active"}],"id":"appscaling","tenantAdminUsername":"admin","tenantDomain":"carbon.super"};
 
 function genTree2(data) {
 
@@ -545,9 +155,15 @@ function genTree(data){
     function clusterInstances(items, collector, parent){
         for(var prop in items){
             if (items.hasOwnProperty(prop)) {
-                var cur_name = items[prop].clusterId;
-                var type = 'cluster';
-                rawout.push({"name": cur_name, "parent": parent, "type": type});
+                var cur_name = items[prop].clusterId + items[prop].instanceId,
+                        alias = items[prop].alias,
+                        hostNames = items[prop].hostNames.toString(),
+                        serviceName = items[prop].serviceName,
+                        status = items[prop].status;
+                var type = 'clusters';
+                rawout.push({"name": cur_name, "parent": parent, "type": type, "status": status,
+                    "alias":alias, "hostNames": hostNames, "serviceName": serviceName
+                });
                 clustermembers(items[prop].member, collector, cur_name)
             }
         }
@@ -556,9 +172,14 @@ function genTree(data){
     function groupInstances(items, collector, parent){
         for(var prop in items){
             if (items.hasOwnProperty(prop)) {
-                var cur_name = items[prop].groupId;
+                var cur_name = items[prop].groupId + items[prop].instanceId,
+                        instanceId = items[prop].instanceId,
+                        groupId = items[prop].groupId,
+                        status = items[prop].status;
                 var type = 'groups';
-                rawout.push({"name": cur_name, "parent": parent, "type": type});
+                rawout.push({"name": cur_name, "parent": parent, "type": type, "status": status,
+                    "groupId":groupId, "instanceId":instanceId
+                });
 
                 clusterInstances(items[prop].clusterInstances, collector, cur_name);
                 if(items[prop].hasOwnProperty('groupInstances')){
@@ -572,9 +193,17 @@ function genTree(data){
     function clustermembers(items, collector, parent){
         for(var prop in items){
             if (items.hasOwnProperty(prop)) {
-                var cur_name = items[prop].memberId;
-                var type = 'member';
-                rawout.push({"name": cur_name, "parent": parent, "type": type});
+                var cur_name = items[prop].memberId,
+                        defaultPrivateIP = items[prop].defaultPrivateIP,
+                        defaultPublicIP = items[prop].defaultPublicIP,
+                        networkPartitionId = items[prop].networkPartitionId,
+                        partitionId = items[prop].partitionId,
+                        status = items[prop].status;
+                var type = 'members';
+                rawout.push({"name": cur_name, "parent": parent, "type": type, "status": status,
+                    "defaultPrivateIP":defaultPrivateIP, "defaultPublicIP":defaultPublicIP,
+                    "networkPartitionId":networkPartitionId, "partitionId":partitionId
+                });
             }
         }
     }
@@ -654,26 +283,37 @@ function update(source) {
             .attr("transform", function(d) {
                 return "translate(" + d.x + "," + d.y + ")"; })
         // add tool tip for ps -eo pid,ppid,pcpu,size,comm,ruser,s
-            .on("mouseover", function(d) {
+            .on("mouseover", function (d) {
                 div.transition()
                         .duration(200)
                         .style("opacity", .9);
 
-                if(d.type == 'cluster') {
+                if (d.type == 'clusters') {
                     div.html(
-                                    "<strong>Cluster ID: </strong>" + d.clusterId + "<br/>"+
-                                    "<strong>Is Lb Cluster: </strong>" + d.isLbCluster
+                                    "<strong>Cluster Id: </strong>" + d.name + "<br/>" +
+                                    "<strong>Cluster Alias: </strong>" + d.alias + "<br/>" +
+                                    "<strong>HostNames: </strong>" + d.hostNames + "<br/>" +
+                                    "<strong>Service Name: </strong>" + d.serviceName + "<br/>" +
+                                    "<strong>Status: </strong>" + d.status
                     ).style("left", (d3.event.pageX) + "px")
                             .style("top", (d3.event.pageY - 28) + "px");
-                }else if(d.type == 'member'){
+                } else if (d.type == 'members') {
                     div.html(
-                                    "<strong>Cluster Id: </strong>" + d.clusterId + "<br/>" +
+                                    "<strong>Member Id: </strong>" + d.name + "<br/>" +
+                                    "<strong>Default Private IP: </strong>" + d.defaultPrivateIP + "<br/>" +
+                                    "<strong>Default Public IP: </strong>" + d.defaultPublicIP + "<br/>" +
+                                    "<strong>Network Partition Id: </strong>" + d.networkPartitionId + "<br/>" +
                                     "<strong>Partition Id: </strong>" + d.partitionId + "<br/>" +
-                                    "<strong>Member Id: </strong>" + d.memberId + "<br/>" +
-                                    "<strong>Member Public Ip: </strong>" + d.memberPublicIp
+                                    "<strong>Status: </strong>" + d.status
                     ).style("left", (d3.event.pageX) + "px")
                             .style("top", (d3.event.pageY - 28) + "px");
-                }else{
+                } else if (d.type == 'groups') {
+                    div.html(
+                                    "<strong>Group Instance Id: </strong>" + d.instanceId + "<br/>" +
+                                    "<strong>Status: </strong>" + d.status
+                    ).style("left", (d3.event.pageX) + "px")
+                            .style("top", (d3.event.pageY - 28) + "px");
+                } else {
                     div.html(
                                     "<strong>Alias: </strong>" + d.name + "<br/>"
                     ).style("left", (d3.event.pageX) + "px")
@@ -722,43 +362,58 @@ function update(source) {
             .attr("y", -15)
             .attr("width", 30)
             .attr("height", 30)
-            .style("fill",function(d) {
-                if (d.type == 'cluster') {
-                    return "#e74c3c";
-                } else if (d.type == 'groups') {
-                    return "#2ecc71";
-                } else if (d.type == 'member'){
-                    return "#9b59b6";
+            .style("fill", function (d) {
+                if (d.status == 'Active' || d.status == 'Activated') {
+                    return "#1abc9c";
+                } else if (d.status == 'Created') {
+                    return "#e67e22";
+                } else if (d.status == 'Inactive') {
+                    return "#7f8c8d";
+                } else if (d.status == 'Terminated') {
+                    return "#c0392b";
                 }else{
                     return "#1abc9c";
-                }});
+                }
+            });
 
     nodeEnter.append("image")
-            .attr( "xlink:href",
-            function(d) {
-                if (d.type == 'cluster') {
+            .attr("xlink:href",
+            function (d) {
+                if (d.type == 'clusters') {
                     return "images/cluster.png";
                 } else if (d.type == 'groups') {
                     return "images/group.png";
-                } else if (d.type == 'member'){
+                } else if (d.type == 'members') {
                     return "images/member.png";
-                }else{
+                } else {
                     return "images/application.png";
-                }})
-            .attr("class","created")
+                }
+            })
+            .attr("class", "created")
             .attr("x", -16)
             .attr("y", -16)
             .attr("width", 32)
             .attr("height", 32);
 
 
-
     nodeEnter.append("text")
-            .attr("y", function(d) {
-                return d.children || d._children ? -20 : 20; })
+            .attr("y", function (d) {
+                return d.children || d._children ? -20 : 20;
+            })
             .attr("dy", ".35em")
             .attr("text-anchor", "middle")
-            .text(function(d) { return d.name; })
+            .text(function (d) {
+                if(d.type == 'members') {
+                    return '';
+                }else if(d.type == 'clusters') {
+                    return d.alias;
+                }else if(d.type == 'groups'){
+                    return d.groupId;
+                }else{
+                    return d.name;
+                }
+
+            })
             .style("fill-opacity", 1);
 
     // add the tool tip
